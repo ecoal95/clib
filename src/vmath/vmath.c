@@ -45,7 +45,7 @@ double IntVector_modulus(IntVector v, size_t length) {
 }
 
 /**
- * Allocate a new int vector
+ * Allocate a new floating point vector
  * @param size_t length
  *
  * @return FloatVector
@@ -56,7 +56,7 @@ FloatVector newFloatVector(size_t length) {
 }
 
 /**
- * Sum of two int vectors
+ * Sum of two floating point vectors
  * @param FloatVector v1
  * @param FloatVector v2
  * @param size_t length

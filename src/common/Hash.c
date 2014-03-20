@@ -70,3 +70,33 @@ pointer Hash_get(Hash * hash, const string key) {
 
 	return NULL;
 }
+
+/**
+ * Iterate through keys and values
+ *
+ * @param Hash * hash
+ * @param void (callback *)(string, pointer)
+ */
+void Hash_iterate(Hash * hash, void (* callback)(string, pointer)) {
+	size_t len = hash->length,
+		i = 0;
+	for(; i < len; i++) {
+		callback(hash->keys[i], hash->data[i]);
+	}
+}
+
+/**
+ * Deallocate hash
+ *
+ * @param Hash * hash
+ */
+void Hash_destroy(Hash * hash) {
+	size_t len = hash->length,
+		i = 0;
+	for(; i < len; i++) {
+		free(hash->keys[i]);
+		// Should we?
+		free(hash->data[i]);
+	}
+	free(hash);
+}

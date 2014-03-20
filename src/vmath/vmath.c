@@ -4,7 +4,7 @@
  *
  * @return IntVector
  */
-IntVector newIntVector(length) {
+IntVector newIntVector(size_t length) {
 	IntVector v = malloc(sizeof(int) * length);
 	return v;
 }
@@ -35,10 +35,10 @@ IntVector IntVector_sum(IntVector v1, IntVector v2, size_t length) {
  */
 double IntVector_modulus(IntVector v, size_t length) {
 	size_t i = 0;
-	llong modulus = 0;
+	double modulus = 0;
 
 	for(; i < length; i++) {
-		modulus += pow(v[i], 2);
+		modulus += v[i] * v[i];
 	}
 
 	return sqrt(modulus);
@@ -50,7 +50,7 @@ double IntVector_modulus(IntVector v, size_t length) {
  *
  * @return FloatVector
  */
-FloatVector newFloatVector(length) {
+FloatVector newFloatVector(size_t length) {
 	FloatVector v = malloc(sizeof(double) * length);
 	return v;
 }

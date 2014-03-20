@@ -161,8 +161,7 @@ char * str_replacec(char *str, const char what, const char with) {
  * @return char * str
  */
 char * str_removechar(char *str, const char car) {
-	size_t length = strlen(str),
-		i = 0,
+	size_t i = 0,
 		// J lo usaremos para incrementar la posición de la cadena si encontramos el caracter
 		j = 0;
 
@@ -290,10 +289,7 @@ char * str_trim(char * str) {
  * @return char * str
  */
 char * str_strip(char * str) {
-	size_t i = 0,
-		last = strlen(str) - 1;
-	// We shouldnt clone it, this way we are using more memory than we need
-	char * ret = str_clone(str);
+	size_t last = strlen(str) - 1;
 
 	while (str[0] == ' ' || str[0] == '\n' || str[0] == '\t') {
 		str++;

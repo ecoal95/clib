@@ -37,7 +37,6 @@ size_t Array_length(Array * arr);
  * Check emptyness of array contents
  *
  * @param Array * array
- *
  */
 #define Array_empty(arr) (arr->data == NULL)
 
@@ -130,4 +129,46 @@ Array * Array_unshift(Array * arr, pointer data);
  * @return Array *
  */
 Array * Array_concat(Array * arr1, Array * arr2);
+
+/**
+ * Check if element is in array
+ *
+ * @param Array * arr
+ * @param pointer data
+ *
+ * @return int -1 in error, index in success
+ * NOTE: This performs strict pointer comparison
+ */
+int Array_contains(Array * arr, pointer data);
+
+/**
+ * Loop through each array element data, calling callback
+ *
+ * @param Array * arr
+ * @param void (* callback)(pointer, size_t) a function that receives the data and the index
+ */
+void Array_forEach(Array * arr, void (* callback)(pointer, size_t));
+
+/**
+ * Loop through each array element, calling callback
+ *
+ * @param Array * arr
+ * @param void (* callback)(Array *, size_t) a function that receives the data and the index
+ */
+void Array_forEachItem(Array * arr, void (* callback)(Array *, size_t));
+
+/**
+ * Free memory function for iteration
+ *
+ * @param Array * item
+ * @param size_t index
+ */
+void Array_free(Array * item, size_t index);
+
+/**
+ * Remove an array with all its items
+ *
+ * @param Array * arr
+ */
+void Array_destroy(Array * arr);
 #endif

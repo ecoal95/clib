@@ -12,6 +12,10 @@
 #define __LIB_AUTO_INCLUDE 0
 #endif
 
+#ifndef __LIB_DEBUG_MODE
+#define __LIB_DEBUG_MODE 0
+#endif
+
 
 // Just include the core, or include the whole library?
 #ifndef __LIB_JUST_CORE

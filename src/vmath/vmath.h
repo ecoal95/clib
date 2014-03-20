@@ -1,8 +1,10 @@
 #ifndef __VMATH_H
 #define __VMATH_H
+
 #include <math.h>
 
 typedef int * IntVector;
+
 typedef double * FloatVector;
 
 /**
@@ -11,7 +13,7 @@ typedef double * FloatVector;
  *
  * @return IntVector
  */
-IntVector newIntVector(length);
+IntVector newIntVector(size_t length);
 
 /**
  * Sum of two int vectors
@@ -37,7 +39,7 @@ double IntVector_modulus(IntVector v, size_t length);
  *
  * @return FloatVector
  */
-FloatVector newFloatVector(length);
+FloatVector newFloatVector(size_t length);
 
 /**
  * Sum of two int vectors

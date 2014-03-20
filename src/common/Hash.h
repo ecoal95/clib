@@ -39,4 +39,19 @@ Hash * Hash_set(Hash * hash, const string key, pointer data);
  * @return pointer
  */
 pointer Hash_get(Hash * hash, const string key);
+
+/**
+ * Iterate through keys and values
+ *
+ * @param Hash * hash
+ * @param void (callback *)(string, pointer)
+ */
+void Hash_iterate(Hash * hash, void (* callback)(string, pointer));
+
+/**
+ * Deallocate hash
+ *
+ * @param Hash * hash
+ */
+void Hash_destroy(Hash * hash);
 #endif

@@ -1,0 +1,64 @@
+#include <windows.h>
+/**
+ * Define message codes
+ */
+#define MESSAGE_DEFAULT 1
+#define MESSAGE_SUCCESS 2
+#define MESSAGE_ERROR 3
+#define MESSAGE_WARNING 4
+#define MESSAGE_INFO 5
+
+/**
+ * Define text color codes
+ * 0 = black or unimplemented
+ */
+#define TEXT_COLOR_DEFAULT FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE
+#define TEXT_COLOR_BLACK 0
+#define TEXT_COLOR_RED FOREGROUND_RED
+#define TEXT_COLOR_GREEN FOREGROUND_GREEN
+#define TEXT_COLOR_YELLOW FOREGROUND_GREEN | FOREGROUND_RED
+#define TEXT_COLOR_BLUE FOREGROUND_BLUE
+#define TEXT_COLOR_MAGENTA FOREGROUND_BLUE | FOREGROUND_RED
+#define TEXT_COLOR_CYAN FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY
+#define TEXT_COLOR_WHITE FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE
+
+#define TEXT_BACKGROUND_DEFAULT 0
+#define TEXT_BACKGROUND_BLACK 0
+#define TEXT_BACKGROUND_RED BACKGROUND_RED
+#define TEXT_BACKGROUND_GREEN BACKGROUND_GREEN
+#define TEXT_BACKGROUND_YELLOW BACKGROUND_GREEN | BACKGROUND_RED
+#define TEXT_BACKGROUND_BLUE BACKGROUND_BLUE
+#define TEXT_BACKGROUND_MAGENTA BACKGROUND_BLUE | BACKGROUND_RED
+#define TEXT_BACKGROUND_CYAN BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_INTENSITY
+#define TEXT_BACKGROUND_WHITE BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE
+
+#define TEXT_STYLE_DEFAULT 0
+#define TEXT_STYLE_BOLD 0
+#define TEXT_STYLE_BLINK 0
+#define TEXT_STYLE_UNDERLINE COMMON_LVB_UNDERSCORE
+#define TEXT_STYLE_HIDDEN 0
+
+void message_custom(const char *msg, const int style, const int color, const int background) {
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	SetConsoleTextAttribute(hConsole, style | color | background);
+	printf("%s", msg);
+	SetConsoleTextAttribute(hConsole, TEXT_STYLE_DEFAULT | TEXT_COLOR_DEFAULT | TEXT_BACKGROUND_DEFAULT);
+}
+/**
+ * Prints a message with custom color
+ * @param char[] msg the message
+ * @param code one of the message codes defined above
+ */
+void message(const char *msg, const int code) {
+	switch (code) {
+		case MESSAGE_ERROR:
+			return message_custom(msg, TEXT_STYLE_DEFAULT, TEXT_COLOR_RED, TEXT_BACKGROUND_DEFAULT);
+		case MESSAGE_INFO:
+			return message_custom(msg, TEXT_STYLE_DEFAULT, TEXT_COLOR_BLUE, TEXT_BACKGROUND_DEFAULT);
+		case MESSAGE_WARNING:
+			return message_custom(msg, TEXT_STYLE_DEFAULT, TEXT_COLOR_YELLOW, TEXT_BACKGROUND_DEFAULT);
+		case MESSAGE_SUCCESS:
+			return message_custom(msg, TEXT_STYLE_DEFAULT, TEXT_COLOR_GREEN, TEXT_BACKGROUND_DEFAULT);
+	}
+}

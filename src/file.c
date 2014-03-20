@@ -57,12 +57,6 @@ char * file_get_contents(const char * src) {
 	return ret;
 }
 
-
-enum file_method {
-	FILE_REPLACE, // add content to a file replacing existing content
-	FILE_APPEND // add content to a file appending to existing content
-};
-
 /**
  * Write into a file. If file doesnt exists it'll be created
  *

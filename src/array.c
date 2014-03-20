@@ -450,7 +450,7 @@ void array_read_ldouble(ldouble * array, size_t length) {
 	size_t i = 0;
 	for(; i < length; i++) {
 		printf("[%d]:", i);
-		scanf("%llf", array + i);
+		scanf("%Lf", array + i);
 		utils_ib_clean();
 	}
 }
@@ -655,9 +655,9 @@ void array_print_double(double * array, size_t length){
 	length--;
 	printf("{");
 	for(; i < length; i++) {
-		printf("%g, ", array[i]);
+		printf("%lg, ", array[i]);
 	}
-	printf("%g}", array[i]);
+	printf("%lg}", array[i]);
 }
 
 /**
@@ -672,9 +672,9 @@ void array_print_ldouble(ldouble * array, size_t length){
 	length--;
 	printf("{");
 	for(; i < length; i++) {
-		printf("%lg, ", array[i]);
+		printf("%Lg, ", array[i]);
 	}
-	printf("%lg}", array[i]);
+	printf("%Lg}", array[i]);
 }
 
 /**

@@ -5,12 +5,7 @@
  *
  * @author Emilio Cobos <emiliocobos@usal.es>
  */
-#include <stdlib.h>
-#include <stddef.h>
 #include <string.h>
-#include <ctype.h>
-
-#include "rand.h"
 
 #define STR_ALPHA_UPPER_MIN 65
 #define STR_ALPHA_UPPER_MAX 90

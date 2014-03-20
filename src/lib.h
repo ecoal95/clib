@@ -26,6 +26,10 @@
 #define __LIB_INCLUDE_UI 0
 #endif
 
+#ifndef __LIB_INCLUDE_VMATH
+#define __LIB_INCLUDE_VMATH 0
+#endif
+
 #include "core/types.h"
 #include "core/utils.h"
 #include "core/rand.h"
@@ -38,23 +42,23 @@
 
 #if __LIB_JUST_CORE == 0
 
-#include "array.h"
-#include "str.h"
-#include "file.h"
+#include "common/array.h"
+#include "common/str.h"
+#include "common/file.h"
 // #include "date.h"
 
-#include "Array.h"
-#include "Hash.h"
+#include "common/Array.h"
+#include "common/Hash.h"
 
 #if __LIB_AUTO_INCLUDE == 1
 
-#include "array.c"
-#include "str.c"
-#include "file.c"
+#include "common/array.c"
+#include "common/str.c"
+#include "common/file.c"
 // #include "date.c"
 
-#include "Array.c"
-#include "Hash.c"
+#include "common/Array.c"
+#include "common/Hash.c"
 
 #endif
 // __LIB_AUTO_INCLUDE
@@ -87,6 +91,20 @@
 
 #include "db/Model.c"
 #include "db/Object.c"
+
+#endif
+// __LIB_AUTO_INCLUDE
+
+#endif
+// __LIB_INCLUDE_DB == 1
+
+#if __LIB_INCLUDE_VMATH == 1
+
+#include "vmath/vmath.h"
+
+#if __LIB_AUTO_INCLUDE == 1
+
+#include "vmath/vmath.c"
 
 #endif
 // __LIB_AUTO_INCLUDE

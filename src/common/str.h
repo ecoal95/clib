@@ -1,11 +1,8 @@
 #ifndef __STR_H
 #define __STR_H
-/**
- * Functions to work with strings
- *
- * @author Emilio Cobos <emiliocobos@usal.es>
- */
-#include <string.h>
+
+#include "../core/core.h"
+#include "array.h"
 
 #define STR_ALPHA_UPPER_MIN 65
 #define STR_ALPHA_UPPER_MAX 90
@@ -22,6 +19,9 @@ enum str_random_type {
 	// STR_RANDOM_ALPHA_SPACE,
 	STR_RANDOM_ASCII
 };
+
+// NULL character (\0) is here to avoid buggy counts when text has whitespace at their rigth side
+const char STR_WORD_SEPARATORS[] = {' ', '\t', '\n', '\r', '\0'};
 
 /**
  * Replaces one string with another string
@@ -214,4 +214,22 @@ char * str_strip(char * str);
  * @return char * dest
  */
 char * str_random(char * dest, size_t length, enum str_random_type type);
+
+/**
+ * Check if char belongs to STR_WORD_SEPARATORS
+ *
+ * @param const char a
+ *
+ * @return boolean
+ */
+boolean is_word_separator(const char a);
+
+/**
+ * Counts the number of words in string and returns it
+ *
+ * @param const char * str
+ *
+ * @return size_t
+ */
+size_t str_wordcount(const char * str);
 #endif

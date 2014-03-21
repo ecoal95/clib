@@ -1,3 +1,4 @@
+#include "array.h"
 /**
  * Check if element exists in an int array and returns the index or -1 if it doesn't
  *
@@ -7,14 +8,8 @@
  *
  * @return int
  */
-int in_int_array(int *array, size_t length, const int element) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		if( array[i] == element ) {
-			return i;
-		}
-	}
-	return -1;
+int in_int_array(const int *array, size_t length, const int element) {
+	__IN_ARRAY(array, element);
 }
 
 /**
@@ -26,14 +21,8 @@ int in_int_array(int *array, size_t length, const int element) {
  *
  * @return int
  */
-int in_uint_array(uint *array, size_t length, const uint element) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		if( array[i] == element ) {
-			return i;
-		}
-	}
-	return -1;
+int in_uint_array(const uint *array, size_t length, const uint element) {
+	__IN_ARRAY(array, element);
 }
 
 /**
@@ -45,14 +34,8 @@ int in_uint_array(uint *array, size_t length, const uint element) {
  *
  * @return int
  */
-int in_long_array(long * array, size_t length, const long element) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		if( array[i] == element ) {
-			return i;
-		}
-	}
-	return -1;
+int in_long_array(const long * array, size_t length, const long element) {
+	__IN_ARRAY(array, element);
 }
 
 /**
@@ -64,14 +47,8 @@ int in_long_array(long * array, size_t length, const long element) {
  *
  * @return int
  */
-int in_ulong_array(ulong * array, size_t length, const ulong element) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		if( array[i] == element ) {
-			return i;
-		}
-	}
-	return -1;
+int in_ulong_array(const ulong * array, size_t length, const ulong element) {
+	__IN_ARRAY(array, element);
 }
 
 /**
@@ -83,14 +60,8 @@ int in_ulong_array(ulong * array, size_t length, const ulong element) {
  *
  * @return int
  */
-int in_llong_array(llong * array, size_t length, const llong element) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		if( array[i] == element ) {
-			return i;
-		}
-	}
-	return -1;
+int in_llong_array(const llong * array, size_t length, const llong element) {
+	__IN_ARRAY(array, element);
 }
 
 /**
@@ -102,14 +73,8 @@ int in_llong_array(llong * array, size_t length, const llong element) {
  *
  * @return int
  */
-int in_ullong_array(ullong * array, size_t length, const ullong element) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		if( array[i] == element ) {
-			return i;
-		}
-	}
-	return -1;
+int in_ullong_array(const ullong * array, size_t length, const ullong element) {
+	__IN_ARRAY(array, element);
 }
 
 /**
@@ -121,14 +86,8 @@ int in_ullong_array(ullong * array, size_t length, const ullong element) {
  *
  * @return int
  */
-int in_short_array(short * array, size_t length, const short element) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		if( array[i] == element ) {
-			return i;
-		}
-	}
-	return -1;
+int in_short_array(const short * array, size_t length, const short element) {
+	__IN_ARRAY(array, element);
 }
 
 /**
@@ -140,14 +99,8 @@ int in_short_array(short * array, size_t length, const short element) {
  *
  * @return int
  */
-int in_ushort_array(ushort * array, size_t length, const ushort element) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		if( array[i] == element ) {
-			return i;
-		}
-	}
-	return -1;
+int in_ushort_array(const ushort * array, size_t length, const ushort element) {
+	__IN_ARRAY(array, element);
 }
 
 /**
@@ -159,26 +112,20 @@ int in_ushort_array(ushort * array, size_t length, const ushort element) {
  *
  * @return int
  */
-int in_char_array(char * array, size_t length, const char element) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		if( array[i] == element ) {
-			return i;
-		}
-	}
-	return -1;
+int in_char_array(const char * array, size_t length, const char element) {
+	__IN_ARRAY(array, element);
 }
 
 /**
- * Check if element exists in an string array and returns the index or -1 if it doesn't
+ * Check if element exists in an char * array and returns the index or -1 if it doesn't
  *
- * @param string * array
+ * @param char * * array
  * @param size_t length
- * @param const string element
+ * @param const char * element
  *
  * @return int
  */
-int in_string_array(string * array, size_t length, const string element) {
+int in_string_array(const char * * array, size_t length, const char * element) {
 	size_t i = 0;
 	for(; i < length; i++) {
 		if( strcmp(array[i], element) == 0 ) {
@@ -197,14 +144,8 @@ int in_string_array(string * array, size_t length, const string element) {
  *
  * @return int
  */
-int in_float_array(float *array, size_t length, const float element) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		if( array[i] == element ) {
-			return i;
-		}
-	}
-	return -1;
+int in_float_array(const float *array, size_t length, const float element) {
+	__IN_ARRAY(array, element);
 }
 
 /**
@@ -216,14 +157,8 @@ int in_float_array(float *array, size_t length, const float element) {
  *
  * @return int
  */
-int in_double_array(double *array, size_t length, const double element) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		if( array[i] == element ) {
-			return i;
-		}
-	}
-	return -1;
+int in_double_array(const double *array, size_t length, const double element) {
+	__IN_ARRAY(array, element);
 }
 
 /**
@@ -235,14 +170,8 @@ int in_double_array(double *array, size_t length, const double element) {
  *
  * @return int
  */
-int in_ldouble_array(ldouble *array, size_t length, const ldouble element) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		if( array[i] == element ) {
-			return i;
-		}
-	}
-	return -1;
+int in_ldouble_array(const ldouble *array, size_t length, const ldouble element) {
+	__IN_ARRAY(array, element);
 }
 
 /**
@@ -253,12 +182,7 @@ int in_ldouble_array(ldouble *array, size_t length, const ldouble element) {
  *
  */
 void array_read_int(int * array, size_t length) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		printf("[%d]:", i);
-		scanf("%i", array + i);
-		utils_ib_clean();
-	}
+	__ARRAY_READ(array, length, FS_INT);
 }
 
 /**
@@ -269,12 +193,7 @@ void array_read_int(int * array, size_t length) {
  *
  */
 void array_read_uint(uint * array, size_t length) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		printf("[%d]:", i);
-		scanf("%u", array + i);
-		utils_ib_clean();
-	}
+	__ARRAY_READ(array, length, FS_UINT);
 }
 
 /**
@@ -285,12 +204,7 @@ void array_read_uint(uint * array, size_t length) {
  *
  */
 void array_read_long(long * array, size_t length) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		printf("[%d]:", i);
-		scanf("%li", array + i);
-		utils_ib_clean();
-	}
+	__ARRAY_READ(array, length, FS_LONG);
 }
 
 /**
@@ -301,12 +215,7 @@ void array_read_long(long * array, size_t length) {
  *
  */
 void array_read_ulong(ulong * array, size_t length) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		printf("[%d]:", i);
-		scanf("%lu", array + i);
-		utils_ib_clean();
-	}
+	__ARRAY_READ(array, length, FS_ULONG);
 }
 
 /**
@@ -317,12 +226,7 @@ void array_read_ulong(ulong * array, size_t length) {
  *
  */
 void array_read_llong(llong * array, size_t length) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		printf("[%d]:", i);
-		scanf("%lli", array + i);
-		utils_ib_clean();
-	}
+	__ARRAY_READ(array, length, FS_LLONG);
 }
 
 /**
@@ -333,12 +237,7 @@ void array_read_llong(llong * array, size_t length) {
  *
  */
 void array_read_ullong(ullong * array, size_t length) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		printf("[%d]:", i);
-		scanf("%llu", array + i);
-		utils_ib_clean();
-	}
+	__ARRAY_READ(array, length, FS_ULLONG);
 }
 
 
@@ -350,12 +249,7 @@ void array_read_ullong(ullong * array, size_t length) {
  *
  */
 void array_read_short(short * array, size_t length) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		printf("[%d]:", i);
-		scanf("%hi", array + i);
-		utils_ib_clean();
-	}
+	__ARRAY_READ(array, length, FS_SHORT);
 }
 
 /**
@@ -366,12 +260,7 @@ void array_read_short(short * array, size_t length) {
  *
  */
 void array_read_ushort(ushort * array, size_t length) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		printf("[%d]:", i);
-		scanf("%hu", array + i);
-		utils_ib_clean();
-	}
+	__ARRAY_READ(array, length, FS_USHORT);
 }
 
 /**
@@ -382,22 +271,17 @@ void array_read_ushort(ushort * array, size_t length) {
  *
  */
 void array_read_char(char * array, size_t length) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		printf("[%d]:", i);
-		scanf("%c", array + i);
-		utils_ib_clean();
-	}
+	__ARRAY_READ(array, length, FS_CHAR);
 }
 
 /**
  * Reads from stdin a whole array
  *
- * @param string * array
+ * @param char * * array
  * @param size_t length
  *
  */
-void array_read_string(string * array, size_t length) {
+void array_read_string(char * * array, size_t length) {
 	size_t i = 0;
 	for(; i < length; i++) {
 		array[i] = malloc(ARRAY_STRING_LENGTH);
@@ -415,12 +299,7 @@ void array_read_string(string * array, size_t length) {
  *
  */
 void array_read_float(float * array, size_t length) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		printf("[%d]:", i);
-		scanf("%f", array + i);
-		utils_ib_clean();
-	}
+	__ARRAY_READ(array, length, FS_FLOAT);
 }
 
 /**
@@ -431,12 +310,7 @@ void array_read_float(float * array, size_t length) {
  *
  */
 void array_read_double(double * array, size_t length) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		printf("[%d]:", i);
-		scanf("%lf", array + i);
-		utils_ib_clean();
-	}
+	__ARRAY_READ(array, length, FS_DOUBLE);
 }
 
 /**
@@ -447,12 +321,7 @@ void array_read_double(double * array, size_t length) {
  *
  */
 void array_read_ldouble(ldouble * array, size_t length) {
-	size_t i = 0;
-	for(; i < length; i++) {
-		printf("[%d]:", i);
-		scanf("%Lf", array + i);
-		utils_ib_clean();
-	}
+	__ARRAY_READ(array, length, FS_LDOUBLE);
 }
 
 
@@ -616,7 +485,7 @@ void array_print_char(char * array, size_t length){
  * @param size_t length
  *
  */
-void array_print_string(string * array, size_t length){
+void array_print_string(char * * array, size_t length){
 	size_t i = 0;
 	length--;
 	printf("{");
@@ -815,12 +684,12 @@ void array_initialize_char(char * array, size_t length, const char val) {
 /**
  * Inicializar arrays
  *
- * @param string * array
+ * @param char * * array
  * @param size_t length
- * @param const string val
+ * @param const char * val
  *
  */
-void array_initialize_string(string * array, size_t length, const string val) {
+void array_initialize_string(char * * array, size_t length, const char * val) {
 	size_t i;
 	for( i = 0; i < length; i++ ) {
 		// yep, we dont point to the same value

@@ -70,8 +70,8 @@ char * str_clone(const char * str) {
  * Turn string to lowercase
  *
  * NOTE:
- *   This function modifies the string passed itself
- *   If you want to get a new string you should use str_toupper(str_clone(str))
+ *   This function modifies the char * passed itself
+ *   If you want to get a new char * you should use str_toupper(str_clone(str))
  *
  * @param char * str
  *
@@ -91,8 +91,8 @@ char * str_toupper(char * str) {
  * Turn string to lowercase
  *
  * NOTE:
- *   This function modifies the string passed itself
- *   If you want to get a new string you should use str_tolower(str_clone(str))
+ *   This function modifies the char * passed itself
+ *   If you want to get a new char * you should use str_tolower(str_clone(str))
  *
  * @param char * str
  *
@@ -110,7 +110,7 @@ char * str_tolower(char * str) {
 /**
  * Turn string to camelcase
  *
- * @param char * str the string to be converted
+ * @param char * str the char * to be converted
  * @param const char separator the character as separator
  *
  * @see str_removechar()
@@ -119,13 +119,11 @@ char * str_tolower(char * str) {
  */
 char * str_tocamel(char * str, const char separator) {
 	size_t i = 0,
-		count = 0,
 		length = strlen(str);
 	str_tolower(str);
 	for(; i < length; i++) {
 		if( str[i] == separator ) {
 			str[i + 1] = toupper(str[i + 1]);
-			count++;
 		}
 	}
 	return str_removechar(str, separator);
@@ -340,4 +338,40 @@ char * str_random(char * dest, size_t length, enum str_random_type type) {
 	}
 	dest[length] = '\0';
 	return dest;
+}
+
+/**
+ * Check if char belongs to STR_WORD_SEPARATORS
+ *
+ * @param const char a
+ *
+ * @return boolean
+ */
+boolean is_word_separator(const char a) {
+	return (in_char_array(STR_WORD_SEPARATORS, array_length(STR_WORD_SEPARATORS), a) != -1);
+}
+
+/**
+ * Counts the number of words in string and returns it
+ *
+ * @param const char * str
+ *
+ * @return size_t
+ */
+size_t str_wordcount(const char * str) {
+	size_t
+		i = 0,
+		length = strlen(str),
+		count = 0;
+	// we can assume a word if the first char is not a separator
+	if( ! is_word_separator(str[0]) ) {
+		count++;
+	}
+	for(; i < length; i++) {
+		// If the current character is a word separator and the next one isn't, we increment the word count
+		if( is_word_separator(str[i]) && ! is_word_separator(str[i + 1]) ) {
+				count++;
+		}
+	}
+	return count;
 }

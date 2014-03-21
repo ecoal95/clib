@@ -1,3 +1,4 @@
+#include "Hash.h"
 /**
  * Alloc a new hash
  *
@@ -15,12 +16,12 @@ Hash * newHash() {
  * Set a hash key
  *
  * @param Hash * hash
- * @param const string key
+ * @param const char * key
  * @param pointer data
  *
  * @return hash
  */
-Hash * Hash_set(Hash * hash, const string key, pointer data) {
+Hash * Hash_set(Hash * hash, const char * key, pointer data) {
 	size_t i = 0,
 		len = hash->length;
 
@@ -51,11 +52,11 @@ Hash * Hash_set(Hash * hash, const string key, pointer data) {
  * Get data from hash
  *
  * @param Hash * hash
- * @param const string key
+ * @param const char * key
  *
  * @return pointer
  */
-pointer Hash_get(Hash * hash, const string key) {
+pointer Hash_get(Hash * hash, const char * key) {
 	size_t i = 0,
 		len = hash->length;
 	for(; i < len; i++ ) {
@@ -75,9 +76,9 @@ pointer Hash_get(Hash * hash, const string key) {
  * Iterate through keys and values
  *
  * @param Hash * hash
- * @param void (callback *)(string, pointer)
+ * @param void (callback *)(char *, pointer)
  */
-void Hash_iterate(Hash * hash, void (* callback)(string, pointer)) {
+void Hash_iterate(Hash * hash, void (* callback)(char *, pointer)) {
 	size_t len = hash->length,
 		i = 0;
 	for(; i < len; i++) {

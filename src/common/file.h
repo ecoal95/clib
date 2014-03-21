@@ -1,5 +1,6 @@
 #ifndef __FILE_H
 #define __FILE_H
+#include "../core/core.h"
 /**
  * Returns file size in bytes
  *

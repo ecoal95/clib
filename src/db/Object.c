@@ -1,3 +1,4 @@
+#include "Object.h"
 /**
  * Initialize an object
  *
@@ -18,7 +19,7 @@ void Object_initialize(Object * o, Model * model) {
  */
 Object * newObject(Model * model) {
 	Object * object = malloc(sizeof(object));
-	Object_initialize(&object, model);
+	Object_initialize(object, model);
 
 	return object;
 }

@@ -1,6 +1,8 @@
 #ifndef __ARRAY_STRUCT_H
 #define __ARRAY_STRUCT_H
 
+#include "../core/core.h"
+
 /**
  * One direction linked list
  */

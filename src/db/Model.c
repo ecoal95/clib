@@ -1,3 +1,4 @@
+#include "Model.h"
 /**
  * Initialize a model
  *
@@ -6,8 +7,7 @@
  * @param size_t fieldCount
  */
 void Model_initialize(Model * model, char ** fields, size_t fieldCount) {
-	size_t i,
-		size = 0;
+	size_t i;
 	model->fieldCount = fieldCount;
 
 	model->fields = malloc(fieldCount * sizeof(char *));
@@ -29,7 +29,7 @@ void Model_initialize(Model * model, char ** fields, size_t fieldCount) {
 Model * newModel(char ** fields, size_t fieldCount) {
 	Model * model = malloc(sizeof(Model));
 
-	Model_initialize(&model, fields, fieldCount);
+	Model_initialize(model, fields, fieldCount);
 
 	return model;
 }

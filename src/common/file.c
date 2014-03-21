@@ -1,3 +1,4 @@
+#include "file.h"
 /**
  * Returns file size in bytes
  *
@@ -38,6 +39,7 @@ unsigned int file_exists(const char *src) {
  * @return char *
  */
 char * file_get_contents(const char * src) {
+	FILE * file;
 	char * ret;
 	size_t filesize;
 	size_t contentlength;
@@ -46,10 +48,11 @@ char * file_get_contents(const char * src) {
 		return "";
 	}
 
-	FILE *file = fopen(src, "r");
+	file = fopen(src, "r");
+
 	filesize = file_size(file);
 
-	ret = (char *) malloc(filesize + sizeof(char)); // Sizeof char para poder poner el \0 y que lo trate como string
+	ret = (char *) malloc(filesize + 1); // Sizeof char para poder poner el \0 y que lo trate como strubg
 	contentlength = fread(ret, 1, filesize, file); // Leemos byte a byte y lo ponemos en el buffer
 	ret[contentlength] = '\0'; // Tenemos que indicar que acaba la cadena, no aparecen caracteres almacenados en otros slots de memoria
 
@@ -66,7 +69,7 @@ char * file_get_contents(const char * src) {
  *
  * @return int
  */
-int file_put_contents(const char *src, const char *content, const enum file_method mode) {
+int file_put_contents(const char * src, const char * content, const enum file_method mode) {
 	int ret;
 	FILE * file;
 	switch(mode) {

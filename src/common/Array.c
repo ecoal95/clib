@@ -1,3 +1,4 @@
+#include "Array.h"
 /**
  * Allocate a new array
  *
@@ -208,7 +209,8 @@ Array * Array_concat(Array * arr1, Array * arr2) {
  * NOTE: This performs strict pointer comparison
  */
 int Array_contains(Array * arr, pointer data) {
-	size_t i = Array_length(arr);
+	size_t len = Array_length(arr),
+		i = 0;
 	for(; i < len; i++) {
 		if( Array_get(arr, i) == data ) {
 			return i;
@@ -271,4 +273,3 @@ void Array_free(Array * item, size_t index) {
 void Array_destroy(Array * arr) {
 	Array_forEachItem(arr, Array_free);
 }
-

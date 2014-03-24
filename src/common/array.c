@@ -13,11 +13,13 @@
 void * array_concat(const void * v1, const size_t l1, const void * v2, const size_t l2, const size_t elementsize) {
 	size_t len = l1 + l2;
 	void * ret = malloc(len * elementsize);
+	// We cast it to char * because char type is always 1 byte, and void * pointer arithmetic is not defined
+	char * ret_bytes = (char *) ret;
 
 	return_val_if(ret == NULL, NULL);
 
-	memcpy(ret, v1, l1 * elementsize);
-	memcpy(ret + l1, v2, l2 * elementsize);
+	memcpy(ret_bytes, v1, l1 * elementsize);
+	memcpy(ret_bytes + l1 * elementsize, v2, l2 * elementsize);
 
 	return ret;
 }

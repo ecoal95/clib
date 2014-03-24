@@ -8,31 +8,68 @@
 #define ARRAY_STRING_LENGTH 100
 #endif
 
-#define __IN_ARRAY(arr, el) do {\
+#define __IN_ARRAY(arr, el) \
 	size_t i = 0;\
 	for(; i < length; i++) {\
 		if( array[i] == element ) {\
 			return i;\
 		}\
 	}\
-	return -1;\
-} while(0)
+	return -1;
 
 // fs = format specifier
-#define __ARRAY_READ(arr, len, fs) do {\
+#define __ARRAY_READ(arr, len, fs) \
 	size_t i = 0; \
 	for(; i < len; i++) { \
 		printf("[%d]:", i); \
 		scanf(fs, arr + i); \
 		utils_ib_clean(); \
-	} \
-} while(0)
-
+	}
 /**
  * Get the length of array
  * NOTE: this only works with statically alocated arrays
  */
 #define array_length(a) (sizeof(a)/sizeof(a[0]))
+
+/**
+ * Concat two arrays
+ *
+ * @param const void * v1 first array
+ * @param const size_t l1
+ * @param const void * v2
+ * @param const size_t l2
+ *
+ * @return void * the new array
+ */
+void * array_concat(const void * v1, const size_t l1, const void * v2, const size_t l2, const size_t elementsize);
+
+#define array_concat_int(v1, l1, v2, l2) ((int *) array_concat(v1, l1, v2, l2, sizeof(int)))
+#define array_concat_uint(v1, l1, v2, l2) ((uint *) array_concat(v1, l1, v2, l2, sizeof(uint)))
+#define array_concat_long(v1, l1, v2, l2) ((long *) array_concat(v1, l1, v2, l2, sizeof(long)))
+#define array_concat_ulong(v1, l1, v2, l2) ((ulong *) array_concat(v1, l1, v2, l2, sizeof(ulong)))
+#define array_concat_llong(v1, l1, v2, l2) ((llong *) array_concat(v1, l1, v2, l2, sizeof(llong)))
+#define array_concat_ullong(v1, l1, v2, l2) ((ullong *) array_concat(v1, l1, v2, l2, sizeof(ullong)))
+#define array_concat_short(v1, l1, v2, l2) ((short *) array_concat(v1, l1, v2, l2, sizeof(short)))
+#define array_concat_ushort(v1, l1, v2, l2) ((ushort *) array_concat(v1, l1, v2, l2, sizeof(ushort)))
+#define array_concat_char(v1, l1, v2, l2) ((char *) array_concat(v1, l1, v2, l2, sizeof(char)))
+#define array_concat_string(v1, l1, v2, l2) ((char * *) array_concat(v1, l1, v2, l2, sizeof(char *)))
+#define array_concat_float(v1, l1, v2, l2) ((float *) array_concat(v1, l1, v2, l2, sizeof(float)))
+#define array_concat_double(v1, l1, v2, l2) ((double *) array_concat(v1, l1, v2, l2, sizeof(double)))
+#define array_concat_ldouble(v1, l1, v2, l2) ((ldouble *) array_concat(v1, l1, v2, l2, sizeof(ldouble)))
+
+
+/**
+ * Generic in_array
+ * Check if element is in array, returns index on success, -1 on failure
+ *
+ * @param const void * array
+ * @param const size_t length
+ * @param const void * element
+ * @param const size_t elementsize
+ *
+ * @return int
+ */
+int in_array(const void * array, const size_t length, const void * element, const size_t elementsize);
 
 /**
  * Check if element exists in an int array and returns the index or -1 if it doesn't

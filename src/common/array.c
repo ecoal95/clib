@@ -1,4 +1,52 @@
 #include "array.h"
+
+/**
+ * Concat two arrays
+ *
+ * @param const void * v1 first array
+ * @param const size_t l1
+ * @param const void * v2
+ * @param const size_t l2
+ *
+ * @return void * the new array
+ */
+void * array_concat(const void * v1, const size_t l1, const void * v2, const size_t l2, const size_t elementsize) {
+	size_t len = l1 + l2;
+	void * ret = malloc(len * elementsize);
+
+	return_val_if(ret == NULL, NULL);
+
+	memcpy(ret, v1, l1 * elementsize);
+	memcpy(ret + l1, v2, l2 * elementsize);
+
+	return ret;
+}
+
+/**
+ * Generic in_array
+ * Check if element is in array, returns index on success, -1 on failure
+ *
+ * @param const void * array
+ * @param const size_t length
+ * @param const void * element
+ * @param const size_t elementsize
+ *
+ * @return int
+ */
+int in_array(const void * array, const size_t length, const void * element, const size_t elementsize) {
+	size_t i = 0,
+		length_in_bytes = length * elementsize;
+	// We use a char * type to do some pointer arithmetic, since char size is always 1
+	char * arr = (char *) array;
+	for(i = 0; i < length_in_bytes; i += elementsize) {
+		if( memcmp(array + i, element, elementsize) == 0 ) {
+			return i / elementsize;
+		}
+	}
+
+	return -1;
+}
+
 /**
  * Check if element exists in an int array and returns the index or -1 if it doesn't
  *

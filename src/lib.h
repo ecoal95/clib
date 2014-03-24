@@ -2,11 +2,6 @@
 // TODO: constant name soooo generic, must change
 #define __LIB_H
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <stddef.h>
-#include <ctype.h>
 
 // To include c files automatically, for easy 1-file projects
 #ifndef __LIB_AUTO_INCLUDE
@@ -35,9 +30,7 @@
 #define __LIB_INCLUDE_VMATH 0
 #endif
 
-#include "core/types.h"
-#include "core/utils.h"
-#include "core/rand.h"
+#include "core/core.h"
 
 #if __LIB_AUTO_INCLUDE == 1
 #include "core/types.c"

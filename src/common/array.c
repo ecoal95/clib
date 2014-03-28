@@ -1,4 +1,20 @@
 #include "array.h"
+/**
+ * Clone an array
+ *
+ * @param const void * array
+ * @param const size_t length
+ * @param const size_t elementsize
+ *
+ * @return void * the new array
+ */
+void * array_clone_raw(const void * array, const size_t length, const size_t elementsize) {
+	void * ret = malloc(length * elementsize);
+
+	memcpy(ret, array, length * elementsize);
+
+	return ret;
+}
 
 /**
  * Concat two arrays
@@ -7,10 +23,11 @@
  * @param const size_t l1
  * @param const void * v2
  * @param const size_t l2
+ * @param const size_t elementsize
  *
  * @return void * the new array
  */
-void * array_concat(const void * v1, const size_t l1, const void * v2, const size_t l2, const size_t elementsize) {
+void * array_concat_raw(const void * v1, const size_t l1, const void * v2, const size_t l2, const size_t elementsize) {
 	size_t len = l1 + l2;
 	void * ret = malloc(len * elementsize);
 	// We cast it to char * because char type is always 1 byte, and void * pointer arithmetic is not defined
@@ -25,6 +42,47 @@ void * array_concat(const void * v1, const size_t l1, const void * v2, const siz
 }
 
 /**
+ * Revert order of an array
+ *
+ * @param void * array
+ * @param const size_t length
+ * @param const size_t elementsize
+ *
+ * @return void * the input array
+ */
+void * array_revert_raw(void * array, const size_t length, const size_t elementsize) {
+	char * array_bytes = (char *) array;
+	size_t i = 0,
+		iterations = length / 2;
+	char temp;
+
+	// If element size isn't one we have to use a different method
+	if( elementsize != 1 ) {
+		char * element = malloc(elementsize);
+		return_val_if(element == NULL, NULL);
+		for( ; i < iterations; i++) {
+			// temp = array[i]
+			memcpy(element, array_bytes + i * elementsize, elementsize);
+			// array[i] = array[length - i - 1]
+			memcpy(array_bytes + i * elementsize, array_bytes + (length - i - 1) * elementsize, elementsize);
+			// array[length - i - 1] = temp;
+			memcpy(array_bytes + (length - i - 1) * elementsize, element, elementsize);
+		}
+
+		free(element);
+
+		return array;
+	}
+
+	for( ; i < iterations; i++) {
+		temp = array_bytes[i];
+		array_bytes[i] = array_bytes[length - i - 1];
+		array_bytes[length - i - 1] = temp;
+	}
+	return array;
+}
+
+/**
  * Generic in_array
  * Check if element is in array, returns index on success, -1 on failure
  *
@@ -35,13 +93,13 @@ void * array_concat(const void * v1, const size_t l1, const void * v2, const siz
  *
  * @return int
  */
-int in_array(const void * array, const size_t length, const void * element, const size_t elementsize) {
+int in_array_raw(const void * array, const size_t length, const void * element, const size_t elementsize) {
 	size_t i = 0,
 		length_in_bytes = length * elementsize;
 	// We use a char * type to do some pointer arithmetic, since char size is always 1
-	char * arr = (char *) array;
+	char * array_bytes = (char *) array;
 	for(i = 0; i < length_in_bytes; i += elementsize) {
-		if( memcmp(array + i, element, elementsize) == 0 ) {
+		if( memcmp(array_bytes + i, element, elementsize) == 0 ) {
 			return i / elementsize;
 		}
 	}

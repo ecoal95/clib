@@ -32,6 +32,24 @@
 #define array_length(a) (sizeof(a)/sizeof(a[0]))
 
 /**
+ * Clone an array
+ *
+ * @param const void * array
+ * @param const size_t length
+ * @param const size_t elementsize
+ *
+ * @return void * the new array
+ */
+void * array_clone_raw(const void * array, const size_t length, const size_t elementsize);
+#define __array_clone_3(array, length, elementsize) (array_clone_raw(array, length, elementsize))
+#define __array_clone_2(array, length) (array_clone_raw(array, length, sizeof(array[0])))
+#ifdef C99
+#define array_clone(...) GET_VA_MACRO_3(__VA_ARGS__, __array_clone_3, __array_clone_2)(__VA_ARGS__)
+#else
+#define array_clone(args...) GET_VA_MACRO_3(args, __array_clone_3, __array_clone_2)(args)
+#endif
+
+/**
  * Concat two arrays
  *
  * @param const void * v1 first array
@@ -41,21 +59,35 @@
  *
  * @return void * the new array
  */
-void * array_concat(const void * v1, const size_t l1, const void * v2, const size_t l2, const size_t elementsize);
+void * array_concat_raw(const void * v1, const size_t l1, const void * v2, const size_t l2, const size_t elementsize);
+#define __array_concat_5(v1, l1, v2, l2, elementsize) (array_concat_raw(v1, l1, v2, l2, elementsize))
+#define __array_concat_4(v1, l1, v2, l2) (array_concat_raw(v1, l1, v2, l2, sizeof(v1[0])))
+#define __array_concat_3(v1, v2, l) (array_concat_raw(v1, l, v2, l, sizeof(v1[0])))
+#define __array_concat_2(v1, v2) (array_concat_raw(v1, array_length(v1), v2, array_length(v2), sizeof(v1[0])))
+#ifdef C99
+#define array_concat(...) GET_VA_MACRO_5(__VA_ARGS__, __array_concat_5, __array_concat_4, __array_concat_3, __array_concat_2)(__VA_ARGS__)
+#else
+#define array_concat(args...) GET_VA_MACRO_5(args, __array_concat_5, __array_concat_4, __array_concat_3, __array_concat_2)(args)
+#endif
 
-#define array_concat_int(v1, l1, v2, l2) ((int *) array_concat(v1, l1, v2, l2, sizeof(int)))
-#define array_concat_uint(v1, l1, v2, l2) ((uint *) array_concat(v1, l1, v2, l2, sizeof(uint)))
-#define array_concat_long(v1, l1, v2, l2) ((long *) array_concat(v1, l1, v2, l2, sizeof(long)))
-#define array_concat_ulong(v1, l1, v2, l2) ((ulong *) array_concat(v1, l1, v2, l2, sizeof(ulong)))
-#define array_concat_llong(v1, l1, v2, l2) ((llong *) array_concat(v1, l1, v2, l2, sizeof(llong)))
-#define array_concat_ullong(v1, l1, v2, l2) ((ullong *) array_concat(v1, l1, v2, l2, sizeof(ullong)))
-#define array_concat_short(v1, l1, v2, l2) ((short *) array_concat(v1, l1, v2, l2, sizeof(short)))
-#define array_concat_ushort(v1, l1, v2, l2) ((ushort *) array_concat(v1, l1, v2, l2, sizeof(ushort)))
-#define array_concat_char(v1, l1, v2, l2) ((char *) array_concat(v1, l1, v2, l2, sizeof(char)))
-#define array_concat_string(v1, l1, v2, l2) ((char * *) array_concat(v1, l1, v2, l2, sizeof(char *)))
-#define array_concat_float(v1, l1, v2, l2) ((float *) array_concat(v1, l1, v2, l2, sizeof(float)))
-#define array_concat_double(v1, l1, v2, l2) ((double *) array_concat(v1, l1, v2, l2, sizeof(double)))
-#define array_concat_ldouble(v1, l1, v2, l2) ((ldouble *) array_concat(v1, l1, v2, l2, sizeof(ldouble)))
+/**
+ * Revert order of an array
+ *
+ * @param void * array
+ * @param const size_t length
+ * @param const size_t elementsize
+ *
+ * @return void * the input array
+ */
+void * array_revert_raw(void * array, const size_t length, const size_t elementsize);
+#define __array_revert_3(array, length, elementsize) (array_revert_raw(array, length, elementsize))
+#define __array_revert_2(array, length) (array_revert_raw(array, length, sizeof(array[0])))
+#define __array_revert_1(array) (array_revert_raw(array, array_length(array), sizeof(array[0])))
+#ifdef C99
+#define array_revert(...) GET_VA_MACRO_3(__VA_ARGS__, __array_revert_3, __array_revert_2, __array_revert_1)(__VA_ARGS__)
+#else
+#define array_revert(args...) GET_VA_MACRO_3(args, __array_revert_3, __array_revert_2, __array_revert_1)(args)
+#endif
 
 
 /**
@@ -69,7 +101,15 @@ void * array_concat(const void * v1, const size_t l1, const void * v2, const siz
  *
  * @return int
  */
-int in_array(const void * array, const size_t length, const void * element, const size_t elementsize);
+int in_array_raw(const void * array, const size_t length, const void * element, const size_t elementsize);
+#define __in_array_4(array, length, element, elementsize) (in_array_raw(array, length, element, elementsize))
+#define __in_array_3(array, length, element) (in_array_raw(array, length, element, sizeof(array[0])))
+#define __in_array_2(array, element) (in_array_raw(array, array_length(array), TO_POINTER(element), sizeof(array[0])))
+#ifdef C99
+#define in_array(...) GET_VA_MACRO_4(__VA_ARGS__, __in_array_4, __in_array_3, __in_array_2)(__VA_ARGS__)
+#else
+#define in_array(args...) GET_VA_MACRO_4(args, __in_array_4, __in_array_3, __in_array_2)(args)
+#endif
 
 /**
  * Check if element exists in an int array and returns the index or -1 if it doesn't

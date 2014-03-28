@@ -9,7 +9,7 @@
 #endif
 
 #ifndef __LIB_DEBUG_MODE
-#define __LIB_DEBUG_MODE 0
+#define __LIB_DEBUG_MODE 1
 #endif
 
 

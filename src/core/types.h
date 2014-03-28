@@ -66,7 +66,7 @@ typedef long double ldouble;
 #define POINTER_TO_DOUBLE(a) ((double) (pointer) a)
 #define POINTER_TO_LDOUBLE(a) ((ldouble) (pointer) a)
 
-
+#define TO_POINTER(a) ((pointer) a)
 #define CHAR_TO_POINTER(a) ((pointer) (char) a)
 #define STRING_TO_POINTER(a) ((pointer) (char *) a)
 #define INT_TO_POINTER(a) ((pointer) (int) a)

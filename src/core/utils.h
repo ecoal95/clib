@@ -1,9 +1,26 @@
 #ifndef __UTILS_H
 #define __UTILS_H
 
+#if __STDC_VERSION__ >= 199901L
+#define C99
+#endif
+
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define ABS(a) (((a) < 0) ? (a) : -(a))
+
+// http://stackoverflow.com/questions/11761703/overloading-macro-on-number-of-arguments
+#ifdef C99
+#define GET_VA_MACRO_2(_1, _2, NAME, ...) NAME
+#define GET_VA_MACRO_3(_1, _2, _3, NAME, ...) NAME
+#define GET_VA_MACRO_4(_1, _2, _3, _4, NAME, ...) NAME
+#define GET_VA_MACRO_5(_1, _2, _3, _4, _5, NAME, ...) NAME
+#else
+#define GET_VA_MACRO_2(_1, _2, NAME, args...) NAME
+#define GET_VA_MACRO_3(_1, _2, _3, NAME, args...) NAME
+#define GET_VA_MACRO_4(_1, _2, _3, _4, NAME, args...) NAME
+#define GET_VA_MACRO_5(_1, _2, _3, _4, _5, NAME, args...) NAME
+#endif
 
 #define is_null(a) ((a) == NULL)
 

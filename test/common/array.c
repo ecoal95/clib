@@ -22,5 +22,6 @@ int main() {
 	printf("\n");
 
 	printf("%d | %d\n", in_array(arr1, &element), in_array(concat, length, &element));
+	printf("%d | %d\n", in_int_array(arr1, array_length(arr1), 4), in_int_array(concat, length, 4));
 	return 0;
 }

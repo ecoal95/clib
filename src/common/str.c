@@ -347,9 +347,17 @@ char * str_random(char * dest, size_t length, enum str_random_type type) {
  *
  * @return boolean
  */
-boolean is_word_separator(const char a) {
-	return (in_char_array(STR_WORD_SEPARATORS, array_length(STR_WORD_SEPARATORS), a) != -1);
+boolean is_word_separator(const char c) {
+	static char word_separators[] = {' ', '\n', '\r', '\t', '\0', ',', '.' /*, '?', '!'*/};
+	static size_t word_separators_length = 0;
+
+	if( word_separators_length == 0 ) {
+		word_separators_length = sizeof(word_separators) /* / sizeof(char) */;
+	}
+
+	return (in_char_array(word_separators, word_separators_length, c) != -1);
 }
+
 
 /**
  * Counts the number of words in string and returns it

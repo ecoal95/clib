@@ -20,9 +20,6 @@ enum str_random_type {
 	STR_RANDOM_ASCII
 };
 
-// NULL character (\0) is here to avoid buggy counts when text has whitespace at their rigth side
-const char STR_WORD_SEPARATORS[] = {' ', '\t', '\n', '\r', '\0'};
-
 /**
  * Replaces one string with another string
  * NOTE: returns a new string

@@ -6,6 +6,8 @@
 #ifndef __RAND_H
 #define __RAND_H
 
+CPP_START
+
 /**
  * Get a random number in some range
  *
@@ -15,4 +17,6 @@
  * @return int
  */
 int rand_in_range(int min, int max);
+
+CPP_END
 #endif

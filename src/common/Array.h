@@ -1,6 +1,8 @@
 #ifndef __ARRAY_STRUCT_H
 #define __ARRAY_STRUCT_H
 
+CPP_START
+
 #include "../core/core.h"
 
 /**
@@ -173,4 +175,7 @@ void Array_free(Array * item, size_t index);
  * @param Array * arr
  */
 void Array_destroy(Array * arr);
+
+CPP_END
+
 #endif

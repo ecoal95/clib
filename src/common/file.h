@@ -1,5 +1,8 @@
 #ifndef __FILE_H
 #define __FILE_H
+
+CPP_START
+
 #include "../core/core.h"
 /**
  * Returns file size in bytes
@@ -43,4 +46,7 @@ enum file_method {
  * @return int
  */
 int file_put_contents(const char *src, const char *content, const enum file_method mode);
+
+CPP_END
+
 #endif

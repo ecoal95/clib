@@ -1,6 +1,8 @@
 #ifndef __TYPES_H
 #define __TYPES_H
 
+CPP_START
+
 typedef void * pointer;
 
 // typedef char * string;
@@ -81,5 +83,7 @@ typedef long double ldouble;
 #define FLOAT_TO_POINTER(a) ((pointer) (float) a)
 #define DOUBLE_TO_POINTER(a) ((pointer) (double) a)
 #define LDOUBLE_TO_POINTER(a) ((pointer) (ldouble) a)
+
+CPP_END
 
 #endif

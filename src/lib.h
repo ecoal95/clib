@@ -3,6 +3,15 @@
 #define __LIB_H
 
 
+#ifdef __cplusplus
+#define CPP_START extern "C" {
+#define CPP_END }
+#else
+#define CPP_START
+#define CPP_END
+#endif
+
+
 // To include c files automatically, for easy 1-file projects
 #ifndef __LIB_AUTO_INCLUDE
 #define __LIB_AUTO_INCLUDE 0

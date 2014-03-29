@@ -1,6 +1,8 @@
 #ifndef __HASH_H
 #define __HASH_H
 
+CPP_START
+
 #include "../core/core.h"
 
 typedef struct Hash {
@@ -56,4 +58,6 @@ void Hash_iterate(Hash * hash, void (* callback)(char *, pointer));
  * @param Hash * hash
  */
 void Hash_destroy(Hash * hash);
+
+CPP_END
 #endif

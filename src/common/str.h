@@ -1,6 +1,8 @@
 #ifndef __STR_H
 #define __STR_H
 
+CPP_START
+
 #include "../core/core.h"
 #include "array.h"
 
@@ -229,4 +231,59 @@ boolean is_word_separator(const char a);
  * @return size_t
  */
 size_t str_wordcount(const char * str);
+
+/**
+ * Parse a string to an int
+ *
+ * @see strtol()
+ *
+ * @param const char * string
+ * @param char * end
+ * @param int base
+ *
+ * @return long
+ */
+#define __parseInt_3(str, end, base) (strtol(str, end, base))
+#define __parseInt_2(str, base) (strtol(str, NULL, base))
+#define __parseInt_1(str) (strtol(str, NULL, 0))
+#ifdef C99
+#define parseInt(...) GET_VA_MACRO_3(__VA_ARGS__,  __parseInt_3, __parseInt_2, __parseInt_1)(__VA_ARGS__)
+#else
+#define parseInt(args...) GET_VA_MACRO_3(args, __parseInt_3, __parseInt_2, __parseInt_1)(args)
+#endif
+
+/**
+ * Parse a string to an int
+ *
+ * @see strtol()
+ *
+ * @param const char * string
+ * @param char * end
+ *
+ * @return double
+ */
+#define __parseFloat_2(str, end) (strtod(str, end))
+#define __parseFloat_1(str) (strtod(str, NULL))
+#ifdef C99
+#define parseFloat(...) GET_VA_MACRO_2(__VA_ARGS__,  __parseInt_2, __parseInt_1)(__VA_ARGS__)
+#else
+#define parseFloat(args...) GET_VA_MACRO_2(args, __parseInt_2, __parseInt_1)(args)
+#endif
+
+/**
+ * Alias for isnan()
+ */
+#define isNaN isnan
+
+/**
+ * Check if string has just numeric values
+ *
+ * @param const char * str
+ *
+ * @return boolean
+ */
+#define is_numeric(str) (! isNaN(parseInt(str)) || ! isNaN(parseFloat(str)))
+
+CPP_END
+
 #endif

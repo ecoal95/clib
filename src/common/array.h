@@ -1,6 +1,8 @@
 #ifndef __ARRAY_H
 #define __ARRAY_H
 
+CPP_START
+
 #include "../core/core.h"
 #include "str.h"
 
@@ -197,4 +199,7 @@ void array_initialize_string(char * * array, size_t length, const char * val);
 void array_initialize_float(float * array, size_t length, float val);
 void array_initialize_double(double * array, size_t length, double val);
 void array_initialize_ldouble(ldouble * array, size_t length, ldouble val);
+
+CPP_END
+
 #endif

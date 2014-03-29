@@ -45,10 +45,11 @@ CPP_START
 void * array_clone_raw(const void * array, const size_t length, const size_t elementsize);
 #define __array_clone_3(array, length, elementsize) (array_clone_raw(array, length, elementsize))
 #define __array_clone_2(array, length) (array_clone_raw(array, length, sizeof(array[0])))
+#define __array_clone_1(array) (array_clone_raw(array, array_length(array), sizeof(array[0])))
 #ifdef C99
-#define array_clone(...) GET_VA_MACRO_3(__VA_ARGS__, __array_clone_3, __array_clone_2)(__VA_ARGS__)
+#define array_clone(...) GET_VA_MACRO_3(__VA_ARGS__, __array_clone_3, __array_clone_2, __array_clone_1)(__VA_ARGS__)
 #else
-#define array_clone(args...) GET_VA_MACRO_3(args, __array_clone_3, __array_clone_2)(args)
+#define array_clone(args...) GET_VA_MACRO_3(args, __array_clone_3, __array_clone_2, __array_clone_1)(args)
 #endif
 
 /**

@@ -23,19 +23,6 @@ enum str_random_type {
 };
 
 /**
- * Replaces one string with another string
- * NOTE: returns a new string
- * http://creativeandcritical.net/str-replace-c/
- *
- * @param const char * str
- * @param const char * oldstr
- * @param const char * newstr
- *
- * @return char *
- */
-char * str_replace(const char * str, const char * oldstr, const char * newstr);
-
-/**
  * Alloc enough space in memory for a clone of str
  *
  * @param const char * str
@@ -107,6 +94,55 @@ char * str_tocamel(char * str, const char separator);
 char * str_replacec(char *str, const char what, const char with);
 
 /**
+ * Count occurrences of a substring
+ *
+ * @param const char * str
+ * @param const char * substr
+ *
+ * @return size_t
+ */
+size_t str_strcount(const char * str, const char * substr);
+
+/**
+ * Get a substring of `length` chars that goes for position `start`
+ *
+ * @param const char * str
+ * @param const size_t start
+ * @param const size_t length
+ */
+char * substr_raw(const char * str, const size_t start, const size_t length);
+#define __substr_3(str, start, length) (substr_raw(str, start, length))
+#define __substr_2(str, start) (substr_raw(str, start, strlen(str) - (start)))
+#ifdef C99
+#define substr(...) GET_VA_MACRO_3(__VA_ARGS__,  __substr_3, __substr_2)(__VA_ARGS__)
+#else
+#define substr(args...) GET_VA_MACRO_3(args, __substr_3, __substr_2)(args)
+#endif
+/**
+ * Get a substring that goes for position `start` to position `end`
+ */
+#define substring_raw(str, start, end) (substr(str, start, end - start))
+#define __substring_3(str, start, end) (substring_raw(str, start, end))
+#define __substring_2(str, start) (substr(str, start))
+#ifdef C99
+#define substring(...) GET_VA_MACRO_3(__VA_ARGS__,  __substring_3, __substring_2)(__VA_ARGS__)
+#else
+#define substring(args...) GET_VA_MACRO_3(args, __substring_3, __substring_2)(args)
+#endif
+
+/**
+ * Replaces one string with another string
+ * NOTE: returns a new string
+ *
+ * @param const char * str
+ * @param const char * oldstr
+ * @param const char * newstr
+ *
+ * @return char *
+ */
+char * str_replace(const char * str, const char * oldstr, const char * newstr);
+
+/**
  * Removes all ocurrences of a character
  *
  * @param char * str
@@ -115,7 +151,6 @@ char * str_replacec(char *str, const char what, const char with);
  * @return char * str
  */
 char * str_removechar(char *str, const char car);
-
 
 /**
  * Removes the \s character from a string
@@ -201,7 +236,6 @@ char * str_trim(char * str);
  * @return char * str
  */
 char * str_strip(char * str);
-
 
 /**
  * Get a random string

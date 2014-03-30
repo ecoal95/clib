@@ -1,59 +1,6 @@
 #include "str.h"
 
 /**
- * Replaces one string with another string
- * NOTE: returns a new string
- * http://creativeandcritical.net/str-replace-c/
- *
- * @param const char * str
- * @param const char * oldstr
- * @param const char * newstr
- *
- * @return char *
- */
-char * str_replace(const char * str, const char * oldstr, const char * newstr) {
-	char *ret, *r;
-	const char *p, *q;
-	size_t oldlen = strlen(oldstr);
-	size_t count, retlen, newlen = strlen(newstr);
-
-	if (oldlen != newlen) {
-		for (count = 0, p = str; (q = strstr(p, oldstr)) != NULL; p = q + oldlen)
-			count++;
-		/* this is undefined if p - str > PTRDIFF_MAX */
-		retlen = p - str + strlen(p) + count * (newlen - oldlen);
-	} else {
-		retlen = strlen(str);
-	}
-
-	if ((ret = (char*) (char *) malloc((retlen + 1) * sizeof (char))) == NULL)
-		return NULL;
-
-	for (r = ret, p = str; (q = strstr(p, oldstr)) != NULL; p = q + oldlen) {
-		/* this is undefined if q - p > PTRDIFF_MAX */
-		ptrdiff_t l = q - p;
-		memcpy(r, p, l);
-		r += l;
-		memcpy(r, newstr, newlen);
-		r += newlen;
-	}
-	strcpy(r, p);
-
-	return ret;
-}
-
-/**
- * Alloc enough space in memory for a clone of str
- *
- * @param const char * str
- *
- * @return char *
- */
-// char * str_alloc_from(const char * str) {
-// 	return (char *) malloc(strlen(str) + 1);
-// }
-
-/**
  * Clone a string
  *
  * @param const char * str
@@ -151,6 +98,122 @@ char * str_replacec(char *str, const char what, const char with) {
 }
 
 /**
+ * Count occurrences of a substring
+ *
+ * @param const char * str
+ * @param const char * substr
+ *
+ * @return size_t
+ */
+size_t str_strcount(const char * str, const char * substr) {
+	size_t
+		substr_length = strlen(substr),
+		occurrences = 0;
+	const char * occurrence = str;
+
+	while( (occurrence = strstr(occurrence, substr)) != NULL ) {
+		occurrences++;
+		occurrence += substr_length;
+	}
+
+	return occurrences;
+}
+
+/**
+ * Get a substring of `length` chars that goes for position `start`
+ *
+ * @param const char * str
+ * @param const size_t start
+ * @param const size_t length
+ */
+char * substr_raw(const char * str, const size_t start, const size_t length) {
+	char * ret;
+	size_t i;
+
+	return_val_if(strlen(str) < length, NULL);
+
+	ret = (char *) malloc(length + 1);
+
+	ret[length] = '\0';
+
+	for(i = 0; i < length; i++) {
+		ret[i] = str[start + i];
+	}
+
+	return ret;
+}
+
+/**
+ * Replaces one string with another string
+ * NOTE: returns a new string
+ *
+ * @param const char * str
+ * @param const char * oldstr
+ * @param const char * newstr
+ *
+ * @return char *
+ */
+char * str_replace(const char * str, const char * oldstr, const char * newstr) {
+	char * ret;
+	const char * occurrence = str;
+	ptrdiff_t positions;
+	size_t
+		old_length = strlen(oldstr),
+		new_length = strlen(newstr),
+		str_length = strlen(str),
+		length_diff = new_length - old_length;
+	size_t
+		occurrences,
+		retlen;
+
+	if (old_length != new_length) {
+		occurrences = str_strcount(str, oldstr);
+
+		// Nothing to replace, just make a new string
+		if( occurrences == 0 ) {
+			return str_clone(str);
+		}
+
+		retlen = str_length + occurrences * length_diff;
+	} else {
+		retlen = str_length;
+	}
+
+	ret = (char *) malloc(retlen + 1);
+
+	// ret[retlen] = '\0';
+
+	// Testing
+	memset(ret, 0, retlen + 1);
+
+	return_val_if(ret == NULL, NULL);
+
+	occurrences = 0;
+	positions = 0;
+
+	while( (occurrence = strstr(occurrence, oldstr)) != NULL ) {
+		// we copy everything until occurrence
+		// in `positions` we have the distance to the last substring + old_length, so we have to copy from str + positions to
+		memcpy(ret + positions + occurrences * length_diff, str + positions, occurrence - str - positions);
+
+		// we copy the new string in the position of the old one
+		positions = occurrence - str;
+		memcpy(ret + positions + occurrences * length_diff, newstr, new_length);
+		occurrence += old_length;
+		occurrences++;
+		positions += old_length;
+	}
+
+
+	// Copy the rest of the string. str_length + 1 ensures that the last char gets copied
+	// the same than strcpy(ret + positions + occurrences * length_diff, str + positions)
+	// and the same than memcpy(ret + positions + occurrences * length_diff, str + positions, strlen(str + positions) + 1);
+	memcpy(ret + positions + occurrences * length_diff, str + positions, str_length - positions + 1);
+
+	return ret;
+}
+
+/**
  * Removes all ocurrences of a character
  *
  * @param char * str
@@ -176,7 +239,6 @@ char * str_removechar(char *str, const char car) {
 	}
 	return str;
 }
-
 
 /**
  * Removes the \s character from a string

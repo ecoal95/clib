@@ -130,7 +130,7 @@ char * substr_raw(const char * str, const size_t start, const size_t length) {
 	char * ret;
 	size_t i;
 
-	return_val_if(strlen(str) < length, NULL);
+	return_null_if(strlen(str) < (length + start));
 
 	ret = (char *) malloc(length + 1);
 
@@ -181,7 +181,7 @@ char * str_replace(const char * str, const char * oldstr, const char * newstr) {
 
 	ret = (char *) malloc(retlen + 1);
 
-	return_val_if(ret == NULL, NULL);
+	return_null_if(ret == NULL);
 
 	occurrences = 0;
 	positions = 0;

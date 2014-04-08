@@ -24,25 +24,19 @@
 
 #define is_null(a) ((a) == NULL)
 
-#define return_if(expr) if(expr) { \
-	fprintf(stderr, "[WARNING] [%s:%d:%s] "#expr" passed\n", __FILE__, __LINE__, __FUNCTION__); \
-	return;                       \
-}
 
 #define return_val_if(expr, val) if(expr) { \
 	fprintf(stderr, "[WARNING] [%s:%d:%s] "#expr" passed\n", __FILE__, __LINE__, __FUNCTION__); \
 	return val;                            \
 }
 
-#define return_if_fail(expr) if(!(expr)) { \
-	fprintf(stderr, "[WARNING] [%s:%d:%s] "#expr" failed\n", __FILE__, __LINE__, __FUNCTION__); \
-	return;                               \
-}
-
 #define return_val_if_fail(expr, val) if(!(expr)) { \
 	fprintf(stderr, "[WARNING] [%s:%d:%s] "#expr" failed\n", __FILE__, __LINE__, __FUNCTION__); \
 	return val;                                 \
 }
+
+#define return_if(expr) return_val_if(expr, void)
+#define return_if_fail(expr) return_val_if_fail(expr, void)
 
 #define return_null_if(expr) return_val_if(expr, NULL)
 #define return_null_if_fail(expr) return_val_if_fail(expr, NULL)

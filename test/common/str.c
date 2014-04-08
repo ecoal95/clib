@@ -22,6 +22,13 @@ static char * TEST_str_replace() {
 	return 0;
 }
 
+static char * TEST_str_wordcount() {
+	char str[] = "Hola,\t\n pepe!";
+	mu_assert("ERROR: not expected result", str_wordcount(str) == 2);
+	mu_assert("ERROR: not expected result", str_wordcount(NULL) == 0);
+	return 0;
+}
+
 static char * TEST_substr() {
 	char str[] = "Hola, mundo!";
 
@@ -37,6 +44,7 @@ static char * all_tests() {
 	mu_run_test(TEST_str_strcount);
 	mu_run_test(TEST_str_replace);
 	mu_run_test(TEST_substr);
+	mu_run_test(TEST_str_wordcount);
 	return 0;
 }
 

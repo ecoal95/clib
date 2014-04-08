@@ -12,6 +12,57 @@
 
 
 /**
+ * Allocate a dynamic matrix
+ *
+ * @param size_t rows
+ * @param size_t cols
+ * @param size_t elementsize
+ *
+ * @return void **
+ */
+void ** matrix_allocate(size_t rows, size_t cols, size_t elementsize) {
+	size_t i = 0;
+	void ** ret = malloc(rows * sizeof(void *));
+
+	return_val_if(ret == NULL, NULL);
+
+	for( ; i < rows; i++ ) {
+		ret[i] = malloc(cols * elementsize);
+
+		if( ret[i] == NULL ) {
+			while(i--) {
+				free(ret[i]);
+			}
+			free(ret);
+			// TODO: warn
+			return NULL;
+		}
+	}
+
+	return ret;
+}
+
+/**
+ * Deallocate a dynamic matrix
+ *
+ * @param void ** matrix
+ * @param size_t rows
+ * @param size_t cols
+ * @param size_t elementsize
+ *
+ * @return void
+ */
+void matrix_deallocate(void ** matrix, size_t rows, size_t cols) {
+	return_if(matrix == NULL);
+
+	while(rows--) {
+		free(matrix[rows]);
+	}
+
+	free(matrix);
+}
+
+/**
  * Leer matrices
  */
 // Por ahora la única manera que sé de hacerla funcionar es definiendo los límites MATRIX_MAX_X, MATRIX_MAX_Y :(

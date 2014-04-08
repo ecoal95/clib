@@ -181,11 +181,6 @@ char * str_replace(const char * str, const char * oldstr, const char * newstr) {
 
 	ret = (char *) malloc(retlen + 1);
 
-	// ret[retlen] = '\0';
-
-	// Testing
-	memset(ret, 0, retlen + 1);
-
 	return_val_if(ret == NULL, NULL);
 
 	occurrences = 0;
@@ -431,8 +426,13 @@ boolean is_word_separator(const char c) {
 size_t str_wordcount(const char * str) {
 	size_t
 		i = 0,
-		length = strlen(str),
+		length,
 		count = 0;
+
+	// Return 0 and warn if `str` isn't a valid string
+	return_val_if(str == NULL, count);
+
+	length = strlen(str);
 	// we can assume a word if the first char is not a separator
 	if( ! is_word_separator(str[0]) ) {
 		count++;
@@ -440,7 +440,7 @@ size_t str_wordcount(const char * str) {
 	for(; i < length; i++) {
 		// If the current character is a word separator and the next one isn't, we increment the word count
 		if( is_word_separator(str[i]) && ! is_word_separator(str[i + 1]) ) {
-				count++;
+			count++;
 		}
 	}
 	return count;

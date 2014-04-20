@@ -27,6 +27,33 @@ CPP_START
 		scanf(fs, arr + i); \
 		utils_ib_clean(); \
 	}
+
+
+/**
+ * Creates an array using dynamic memory allocation
+ *
+ * @param size_t size
+ * @param size_t elementsize
+ *
+ * @return void * the new array, NULL on failure
+ */
+void * array_create(size_t size, size_t elementsize);
+
+#define array_create_int(size) (int *) array_create(size, sizeof(int));
+#define array_create_uint(size) (uint *) array_create(size, sizeof(uint));
+#define array_create_long(size) (long *) array_create(size, sizeof(long));
+#define array_create_ulong(size) (ulong *) array_create(size, sizeof(ulong));
+#define array_create_llong(size) (llong *) array_create(size, sizeof(llong));
+#define array_create_ullong(size) (ullong *) array_create(size, sizeof(ullong));
+#define array_create_short(size) (short *) array_create(size, sizeof(short));
+#define array_create_ushort(size) (ushort *) array_create(size, sizeof(ushort));
+#define array_create_char(size) (char *) array_create(size, sizeof(char));
+#define array_create_string(size) (char * *) array_create(size, sizeof(char *));
+#define array_create_float(size) (float *) array_create(size, sizeof(float));
+#define array_create_double(size) (double *) array_create(size, sizeof(double));
+#define array_create_ldouble(size) (ldouble *) array_create(size, sizeof(ldouble));
+
+
 /**
  * Get the length of array
  * NOTE: this only works with statically alocated arrays

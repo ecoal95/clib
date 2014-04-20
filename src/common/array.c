@@ -1,5 +1,26 @@
 #include "array.h"
 /**
+ * Creates an array using dynamic memory allocation
+ *
+ * @param size_t size
+ * @param size_t elementsize
+ *
+ * @return void * the new array, NULL on failure
+ */
+void * array_create(size_t size, size_t elementsize) {
+	void * ret;
+
+	return_null_if(size <= 0);
+	return_null_if(elementsize <= 0);
+
+	ret = (void *) malloc(size * elementsize);
+
+	return_null_if(ret == NULL); // ensure warning
+
+	return ret;
+}
+
+/**
  * Clone an array
  *
  * @param const void * array

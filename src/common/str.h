@@ -45,6 +45,23 @@ enum str_random_type {
 char * str_clone(const char * str);
 
 /**
+ * Get an empty string
+ *
+ * @return char *
+ */
+char * str_empty();
+
+/**
+ * Concat two strings
+ *
+ * @param const char * str1
+ * @param const char * str2
+ *
+ * @return char *
+ */
+char * str_concat(const char * str1, const char * str2);
+
+/**
  * Turn string to lowercase
  *
  * NOTE:

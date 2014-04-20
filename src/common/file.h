@@ -4,6 +4,11 @@
 CPP_START
 
 #include "../core/core.h"
+
+#define DIRECTORY_SEPARATOR '/'
+#define EOL '\n'
+#define FILE_LINE_BASE_LENGTH 256
+
 /**
  * Returns file size in bytes
  *
@@ -11,7 +16,30 @@ CPP_START
  *
  * @return size_t the file size
  */
-size_t file_size(FILE *src);
+size_t FILE_size(FILE *src);
+
+
+/**
+ * Make a callback each line of the file
+ * TODO: Consider changing return type to boolean
+ *
+ * @param FILE * file
+ * @param int (*callback)(char *) callback function that receives the line and returns 0 on success
+ *
+ * @return int (< 0 on error)
+ */
+int FILE_eachLine(FILE * file, int (*callback)(char *));
+
+
+/**
+ * Copies two files
+ *
+ * @param FILE * dest
+ * @param FILE * src
+ *
+ * @return boolean
+ */
+boolean FILE_copy(FILE * dest, FILE * src);
 
 /**
  * Returns if a file exists or not
@@ -20,7 +48,54 @@ size_t file_size(FILE *src);
  *
  * @return unsigned int
  */
-unsigned int file_exists(const char *src);
+boolean file_exists(const char *src);
+
+/**
+ * Returns a file name
+ *
+ * @param const char * src
+ *
+ * @return char *
+ */
+char * file_filename(const char * src);
+
+/**
+ * Returns a file extension
+ *
+ * @param const char * src
+ *
+ * @return char *
+ */
+char * file_extension(const char * src);
+
+/**
+ * Returns a file basename
+ *
+ * @param const char * src
+ *
+ * @return char *
+ */
+char * file_basename(const char * src);
+
+/**
+ * Copies two files
+ *
+ * @param const char * dest
+ * @param const char * src
+ *
+ * @return boolean
+ */
+boolean file_copy(const char * dest, const char * src);
+
+/**
+ * Make a callback each line of the file
+ *
+ * @param const char * file
+ * @param int (*callback)(char *) callback function that receives the line and returns 0 on success
+ *
+ * @return int (< 0 on error)
+ */
+int file_eachLine(const char * file, int (*callback)(char *));
 
 /**
  * Returns the full content of a file

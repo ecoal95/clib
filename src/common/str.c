@@ -8,8 +8,46 @@
  * @return char *
  */
 char * str_clone(const char * str) {
-	char * ret = str_alloc_from(str);
-	strcpy(ret, str);
+	size_t size = strlen(str) + 1;
+	char * ret = (char *) malloc(size);
+
+	return_val_if(ret == NULL, NULL);
+
+	memcpy(ret, str, size);
+
+	return ret;
+}
+
+/**
+ * Get an empty string
+ *
+ * @return char *
+ */
+char * str_empty() {
+	char * ret = (char *) calloc(1, sizeof(char));
+
+	return_val_if(ret == NULL, NULL);
+
+	return ret;
+}
+
+/**
+ * Concat two strings
+ *
+ * @param const char * str1
+ * @param const char * str2
+ *
+ * @return char *
+ */
+char * str_concat(const char * str1, const char * str2) {
+	size_t
+		str1_length = strlen(str1),
+		str2_length = strlen(str2);
+	char * ret = (char *) malloc(str1_length + str2_length + 1);
+
+	memcpy(ret, str1, str1_length);
+	memcpy(ret + str1_length, str2, str2_length + 1);
+
 	return ret;
 }
 
@@ -346,11 +384,11 @@ char * str_trim(char * str) {
 char * str_strip(char * str) {
 	size_t last = strlen(str) - 1;
 
-	while (str[0] == ' ' || str[0] == '\n' || str[0] == '\t') {
+	while (isspace(str[0])) {
 		str++;
 	}
 
-	while (str[last] == ' ' || str[last] == '\n' || str[last] == '\n' ) {
+	while (isspace(str[last])) {
 		last--;
 	}
 
@@ -405,14 +443,14 @@ char * str_random(char * dest, size_t length, enum str_random_type type) {
  * @return boolean
  */
 boolean is_word_separator(const char c) {
-	static char word_separators[] = {' ', '\n', '\r', '\t', '\0', ',', '.' /*, '?', '!'*/};
+	static char word_separators[] = {'\0', ',', '.' /*, '?', '!'*/};
 	static size_t word_separators_length = 0;
 
 	if( word_separators_length == 0 ) {
 		word_separators_length = sizeof(word_separators) /* / sizeof(char) */;
 	}
 
-	return (in_char_array(word_separators, word_separators_length, c) != -1);
+	return (isspace(c) || (in_char_array(word_separators, word_separators_length, c) != -1));
 }
 
 

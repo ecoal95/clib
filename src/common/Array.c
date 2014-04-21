@@ -80,7 +80,14 @@ Array * Array_last(Array * arr) {
  */
 Array * Array_push(Array * arr, pointer data) {
 	Array * item = newArray(data);
-	Array * last = Array_last(arr);
+	Array * last;
+
+	return_null_if(item == NULL);
+
+	last = Array_last(arr);
+
+	return_null_if(last == NULL);
+
 	last->next = item;
 	return arr;
 }
@@ -187,6 +194,46 @@ Array * Array_unshift(Array * arr, pointer data) {
 }
 
 /**
+ * Removes elements from an array
+ *
+ * @param int index starting item
+ * @param size_t elements number of elements to remove
+ *
+ * @return void
+ */
+void Array_splice(Array * arr, int index, size_t elements) {
+	size_t length = Array_length(arr),
+		i;
+	Array * prev;
+	Array * last_removed_element;
+
+	// TODO: allow negative index
+	return_if(index > length);
+	return_if(elements + index > length);
+
+	if( index == 0 ) {
+		for(i = 0; i < elements; i++) {
+			// NOTE: we pass 0 as index because it does not matter
+			Array_free(Array_shift(arr), 0);
+		}
+		return;
+	}
+
+	prev = Array_nth(arr, index - 1);
+
+	return_if(prev == NULL);
+
+	last_removed_element = Array_nth(arr, index + elements - 1);
+
+	prev->next = last_removed_element->next;
+
+	i = elements;
+	while(elements--) {
+		Array_free(Array_nth(arr, index + elements), 0);
+	}
+}
+
+/**
  * Concat two arrays
  *
  * @param Array * arr1
@@ -263,7 +310,7 @@ void Array_forEachItem(Array * arr, void (* callback)(Array *, size_t)) {
  * @param size_t index
  */
 void Array_free(Array * item, size_t index) {
-	// should we clean data?
+	// NOTE: should we clean data?
 	free(item->data);
 	free(item);
 }

@@ -125,6 +125,16 @@ Array * Array_shift(Array * arr);
 Array * Array_unshift(Array * arr, pointer data);
 
 /**
+ * Removes elements from an array
+ *
+ * @param int index starting item
+ * @param size_t elements number of elements to remove
+ *
+ * @return void
+ */
+void Array_splice(Array * arr, int index, size_t elements);
+
+/**
  * Concat two arrays
  *
  * @param Array * arr1
@@ -142,6 +152,7 @@ Array * Array_concat(Array * arr1, Array * arr2);
  *
  * @return int -1 in error, index in success
  * NOTE: This performs strict pointer comparison
+ * TODO: Create macro and perform memory comparison
  */
 int Array_contains(Array * arr, pointer data);
 

@@ -31,6 +31,8 @@ void * array_create(size_t size, size_t elementsize) {
  */
 void * array_clone_raw(const void * array, const size_t length, const size_t elementsize) {
 	void * ret = malloc(length * elementsize);
+	
+	return_null_if(ret == NULL);
 
 	memcpy(ret, array, length * elementsize);
 
@@ -79,8 +81,10 @@ void * array_revert_raw(void * array, const size_t length, const size_t elements
 
 	// If element size isn't one we have to use a different method
 	if( elementsize != 1 ) {
-		char * element = malloc(elementsize);
+		char * element = (char *) malloc(elementsize);
+
 		return_val_if(element == NULL, NULL);
+
 		for( ; i < iterations; i++) {
 			// temp = array[i]
 			memcpy(element, array_bytes + i * elementsize, elementsize);
@@ -119,7 +123,7 @@ int in_array_raw(const void * array, const size_t length, const void * element, 
 		length_in_bytes = length * elementsize;
 	// We use a char * type to do some pointer arithmetic, since char size is always 1
 	char * array_bytes = (char *) array;
-	for(i = 0; i < length_in_bytes; i += elementsize) {
+	for( ; i < length_in_bytes; i += elementsize) {
 		if( memcmp(array_bytes + i, element, elementsize) == 0 ) {
 			return i / elementsize;
 		}

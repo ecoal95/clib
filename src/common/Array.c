@@ -2,12 +2,15 @@
 /**
  * Allocate a new array
  *
- * @param pointer data
+ * @param void * data
  *
  * @return Array *
  */
-Array * newArray(pointer data) {
-	Array * arr = malloc(sizeof(Array));
+Array * newArray(void * data) {
+	Array * arr = (Array *) malloc(sizeof(Array));
+
+	return_null_if(arr == NULL);
+
 	arr->data = data;
 	return arr;
 }
@@ -71,11 +74,11 @@ Array * Array_last(Array * arr) {
  * Push data into the array
  *
  * @param Array * arr
- * @param pointer data
+ * @param void * data
  *
  * @return Array *
  */
-Array * Array_push(Array * arr, pointer data) {
+Array * Array_push(Array * arr, void * data) {
 	Array * item = newArray(data);
 	Array * last = Array_last(arr);
 	last->next = item;
@@ -87,11 +90,11 @@ Array * Array_push(Array * arr, pointer data) {
  *
  * @param Array * arr
  * @param int index
- * @param pointer data
+ * @param void * data
  *
- * @return pointer data
+ * @return void * data
  */
-pointer Array_set(Array * arr, int index, pointer data) {
+void * Array_set(Array * arr, int index, void * data) {
 	Array * item = Array_nth(arr, index);
 	size_t length;
 
@@ -123,9 +126,9 @@ pointer Array_set(Array * arr, int index, pointer data) {
  * @param Array * arr
  * @param int index
  *
- * @return pointer
+ * @return void *
  */
-pointer Array_get(Array * arr, int index) {
+void * Array_get(Array * arr, int index) {
 	Array * item = Array_nth(arr, index);
 
 	if( item == NULL ) {
@@ -162,7 +165,7 @@ Array * Array_shift(Array * arr) {
 	Array * first = arr;
 	arr = arr->next;
 
-	return_val_if(first == NULL, NULL);
+	return_null_if(first == NULL);
 
 	first->next = NULL;
 
@@ -173,11 +176,11 @@ Array * Array_shift(Array * arr) {
  * Insert an element in the first position
  *
  * @param Array * arr
- * @param pointer data
+ * @param void * data
  *
  * @return Array *
  */
-Array * Array_unshift(Array * arr, pointer data) {
+Array * Array_unshift(Array * arr, void * data) {
 	Array * item = newArray(data);
 	item->next = arr;
 	return item;
@@ -193,7 +196,7 @@ Array * Array_unshift(Array * arr, pointer data) {
  */
 Array * Array_concat(Array * arr1, Array * arr2) {
 
-	return_val_if( arr1 == NULL || arr2 == NULL, NULL);
+	return_null_if(arr1 == NULL || arr2 == NULL);
 
 	Array_last(arr1)->next = arr2;
 	return arr1;
@@ -203,12 +206,12 @@ Array * Array_concat(Array * arr1, Array * arr2) {
  * Check if element is in array
  *
  * @param Array * arr
- * @param pointer data
+ * @param void * data
  *
  * @return int -1 in error, index in success
  * NOTE: This performs strict pointer comparison
  */
-int Array_contains(Array * arr, pointer data) {
+int Array_contains(Array * arr, void * data) {
 	size_t len = Array_length(arr),
 		i = 0;
 	for(; i < len; i++) {
@@ -223,9 +226,9 @@ int Array_contains(Array * arr, pointer data) {
  * Loop through each array element data, calling callback
  *
  * @param Array * arr
- * @param void (* callback)(pointer, size_t) a function that receives the data and the index
+ * @param void (* callback)(void *, size_t) a function that receives the data and the index
  */
-void Array_forEach(Array * arr, void (* callback)(pointer, size_t)) {
+void Array_forEach(Array * arr, void (* callback)(void *, size_t)) {
 	Array * current = arr;
 	size_t i = 0;
 

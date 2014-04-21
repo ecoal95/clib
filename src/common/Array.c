@@ -2,11 +2,11 @@
 /**
  * Allocate a new array
  *
- * @param void * data
+ * @param pointer data
  *
  * @return Array *
  */
-Array * newArray(void * data) {
+Array * newArray(pointer data) {
 	Array * arr = (Array *) malloc(sizeof(Array));
 
 	return_null_if(arr == NULL);
@@ -74,11 +74,11 @@ Array * Array_last(Array * arr) {
  * Push data into the array
  *
  * @param Array * arr
- * @param void * data
+ * @param pointer data
  *
  * @return Array *
  */
-Array * Array_push(Array * arr, void * data) {
+Array * Array_push(Array * arr, pointer data) {
 	Array * item = newArray(data);
 	Array * last = Array_last(arr);
 	last->next = item;
@@ -90,11 +90,11 @@ Array * Array_push(Array * arr, void * data) {
  *
  * @param Array * arr
  * @param int index
- * @param void * data
+ * @param pointer data
  *
- * @return void * data
+ * @return pointer data
  */
-void * Array_set(Array * arr, int index, void * data) {
+pointer Array_set(Array * arr, int index, pointer data) {
 	Array * item = Array_nth(arr, index);
 	size_t length;
 
@@ -126,9 +126,9 @@ void * Array_set(Array * arr, int index, void * data) {
  * @param Array * arr
  * @param int index
  *
- * @return void *
+ * @return pointer
  */
-void * Array_get(Array * arr, int index) {
+pointer Array_get(Array * arr, int index) {
 	Array * item = Array_nth(arr, index);
 
 	if( item == NULL ) {
@@ -176,11 +176,11 @@ Array * Array_shift(Array * arr) {
  * Insert an element in the first position
  *
  * @param Array * arr
- * @param void * data
+ * @param pointer data
  *
  * @return Array *
  */
-Array * Array_unshift(Array * arr, void * data) {
+Array * Array_unshift(Array * arr, pointer data) {
 	Array * item = newArray(data);
 	item->next = arr;
 	return item;
@@ -206,12 +206,12 @@ Array * Array_concat(Array * arr1, Array * arr2) {
  * Check if element is in array
  *
  * @param Array * arr
- * @param void * data
+ * @param pointer data
  *
  * @return int -1 in error, index in success
  * NOTE: This performs strict pointer comparison
  */
-int Array_contains(Array * arr, void * data) {
+int Array_contains(Array * arr, pointer data) {
 	size_t len = Array_length(arr),
 		i = 0;
 	for(; i < len; i++) {
@@ -226,9 +226,9 @@ int Array_contains(Array * arr, void * data) {
  * Loop through each array element data, calling callback
  *
  * @param Array * arr
- * @param void (* callback)(void *, size_t) a function that receives the data and the index
+ * @param void (* callback)(pointer, size_t) a function that receives the data and the index
  */
-void Array_forEach(Array * arr, void (* callback)(void *, size_t)) {
+void Array_forEach(Array * arr, void (* callback)(pointer, size_t)) {
 	Array * current = arr;
 	size_t i = 0;
 

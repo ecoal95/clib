@@ -17,6 +17,13 @@ typedef struct Array Array;
 
 
 /**
+ * Check emptyness of array contents
+ *
+ * @param Array * array
+ */
+#define Array_empty(arr) (arr->data == NULL)
+
+/**
  * Allocate a new array
  *
  * @param pointer data
@@ -33,17 +40,6 @@ Array * newArray(pointer data);
  * @return size_t
  */
 size_t Array_length(Array * arr);
-
-// uint Array_empty(Array * arr) {
-// 	return arr->data == NULL;
-// }
-/**
- * Check emptyness of array contents
- *
- * @param Array * array
- */
-#define Array_empty(arr) (arr->data == NULL)
-
 
 /**
  * Get the nth element from the array
@@ -65,6 +61,7 @@ Array * Array_nth(Array * arr, int index);
  * @return Array *
  */
 Array * Array_last(Array * arr);
+
 /**
  * Push data into the array
  *
@@ -97,7 +94,7 @@ pointer Array_set(Array * arr, int index, pointer data);
 pointer Array_get(Array * arr, int index);
 
 /**
- * Pops the last element of the array and returns it
+ * Removes the last element of the array and returns the array
  *
  * @param Array * arr
  *
@@ -106,7 +103,7 @@ pointer Array_get(Array * arr, int index);
 Array * Array_pop(Array * arr);
 
 /**
- * Removes the first element from the array and returns it
+ * Removes the first element from the array and returns the new array
  *
  * @param Array * arr
  *
@@ -115,7 +112,7 @@ Array * Array_pop(Array * arr);
 Array * Array_shift(Array * arr);
 
 /**
- * Insert an element in the first position
+ * Insert an element in the first position and return the new array
  *
  * @param Array * arr
  * @param pointer data
@@ -125,14 +122,24 @@ Array * Array_shift(Array * arr);
 Array * Array_unshift(Array * arr, pointer data);
 
 /**
- * Removes elements from an array
+ * Delete a single element from array
+ *
+ * @param Array * arr
+ * @param int index
+ *
+ * @return Array * the new array
+ */
+Array * Array_delete(Array * arr, int index);
+
+/**
+ * Removes elements from an array and returns the new array
  *
  * @param int index starting item
  * @param size_t elements number of elements to remove
  *
- * @return void
+ * @return Array * arr
  */
-void Array_splice(Array * arr, int index, size_t elements);
+Array * Array_splice(Array * arr, int index, size_t elements);
 
 /**
  * Concat two arrays
@@ -152,7 +159,6 @@ Array * Array_concat(Array * arr1, Array * arr2);
  *
  * @return int -1 in error, index in success
  * NOTE: This performs strict pointer comparison
- * TODO: Create macro and perform memory comparison
  */
 int Array_contains(Array * arr, pointer data);
 
@@ -173,19 +179,34 @@ void Array_forEach(Array * arr, void (* callback)(pointer, size_t));
 void Array_forEachItem(Array * arr, void (* callback)(Array *, size_t));
 
 /**
+ * Free an element memory
+ *
+ * @param Array * item
+ *
+ * @return void
+ */
+void Array_free(Array * item);
+
+/**
  * Free memory function for iteration
  *
  * @param Array * item
  * @param size_t index
+ *
+ * @return void
  */
-void Array_free(Array * item, size_t index);
+void Array_free_1(Array * item, size_t index);
 
 /**
  * Remove an array with all its items
  *
  * @param Array * arr
+ *
+ * @return void
  */
 void Array_destroy(Array * arr);
+
+
 
 CPP_END
 

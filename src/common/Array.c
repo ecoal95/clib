@@ -43,20 +43,19 @@ size_t Array_length(Array * arr) {
  */
 Array * Array_nth(Array * arr, int index) {
 	size_t length = Array_length(arr);
+	Array * item = arr;
 
 	if( index < 0 ) {
 		index += length;
 	}
 
-	if( index >= length || index < 0) {
-		return NULL;
+	return_null_if(index >= length || index < 0);
+
+	while(index--) {
+		item = item->next;
 	}
 
-	if( index == 0 ) {
-		return arr;
-	}
-
-	return arr[index - 1].next;
+	return item;
 }
 
 /**
@@ -138,15 +137,13 @@ pointer Array_set(Array * arr, int index, pointer data) {
 pointer Array_get(Array * arr, int index) {
 	Array * item = Array_nth(arr, index);
 
-	if( item == NULL ) {
-		return NULL;
-	}
+	return_null_if(item == NULL);
 
 	return item->data;
 }
 
 /**
- * Pops the last element of the array and returns it
+ * Removes the last element of the array and returns the array
  *
  * @param Array * arr
  *
@@ -154,15 +151,16 @@ pointer Array_get(Array * arr, int index) {
  */
 Array * Array_pop(Array * arr) {
 	Array * penultimate = Array_nth(arr, -2);
-	Array * last = penultimate->next;
+
+	Array_free(penultimate->next);
 
 	penultimate->next = NULL;
 
-	return last;
+	return arr;
 }
 
 /**
- * Removes the first element from the array and returns it
+ * Removes the first element from the array and returns the new array
  *
  * @param Array * arr
  *
@@ -176,11 +174,11 @@ Array * Array_shift(Array * arr) {
 
 	first->next = NULL;
 
-	return first;
+	return arr;
 }
 
 /**
- * Insert an element in the first position
+ * Insert an element in the first position and return the new array
  *
  * @param Array * arr
  * @param pointer data
@@ -194,43 +192,70 @@ Array * Array_unshift(Array * arr, pointer data) {
 }
 
 /**
- * Removes elements from an array
+ * Delete a single element from array
+ *
+ * @param Array * arr
+ * @param int index
+ *
+ * @return Array * the new array
+ */
+Array * Array_delete(Array * arr, int index) {
+	Array * element;
+	if( index == 0 ) {
+		return Array_shift(arr);
+	}
+
+	element = Array_nth(arr, index);
+
+	Array_nth(arr, index - 1)->next = element->next;
+
+	Array_free(element);
+
+	return arr;
+}
+
+/**
+ * Removes elements from an array and returns the new array
  *
  * @param int index starting item
  * @param size_t elements number of elements to remove
  *
- * @return void
+ * @return Array * arr
  */
-void Array_splice(Array * arr, int index, size_t elements) {
+Array * Array_splice(Array * arr, int index, size_t elements) {
 	size_t length = Array_length(arr),
 		i;
 	Array * prev;
 	Array * last_removed_element;
 
 	// TODO: allow negative index
-	return_if(index > length);
-	return_if(elements + index > length);
+	return_val_if(index > length, arr);
+	return_val_if(elements + index > length, arr);
 
 	if( index == 0 ) {
 		for(i = 0; i < elements; i++) {
-			// NOTE: we pass 0 as index because it does not matter
-			Array_free(Array_shift(arr), 0);
+			arr = Array_shift(arr);
 		}
-		return;
+		return arr;
 	}
 
 	prev = Array_nth(arr, index - 1);
 
-	return_if(prev == NULL);
+	return_val_if(prev == NULL, arr);
 
 	last_removed_element = Array_nth(arr, index + elements - 1);
 
+
+	i = elements - 1; // want to keep the last one
+	while(i--) {
+		Array_free(Array_nth(arr, index + i));
+	}
+
 	prev->next = last_removed_element->next;
 
-	i = elements;
-	while(elements--) {
-		Array_free(Array_nth(arr, index + elements), 0);
-	}
+	Array_free(last_removed_element);
+
+	return arr;
 }
 
 /**
@@ -304,22 +329,37 @@ void Array_forEachItem(Array * arr, void (* callback)(Array *, size_t)) {
 }
 
 /**
- * Free memory function for iteration
+ * Free an element memory
  *
  * @param Array * item
- * @param size_t index
+ *
+ * @return void
  */
-void Array_free(Array * item, size_t index) {
+void Array_free(Array * item) {
 	// NOTE: should we clean data?
 	free(item->data);
 	free(item);
 }
 
 /**
+ * Free memory function for iteration
+ *
+ * @param Array * item
+ * @param size_t index
+ *
+ * @return void
+ */
+void Array_free_1(Array * item, size_t index) {
+	Array_free(item);
+}
+
+/**
  * Remove an array with all its items
  *
  * @param Array * arr
+ *
+ * @return void
  */
 void Array_destroy(Array * arr) {
-	Array_forEachItem(arr, Array_free);
+	Array_forEachItem(arr, Array_free_1);
 }

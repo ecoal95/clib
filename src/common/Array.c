@@ -1,18 +1,55 @@
 #include "Array.h"
+
 /**
  * Allocate a new array
  *
- * @param pointer data
+ * @return Array *
+ */
+Array * newArray() {
+	Array * ret = (Array *) malloc(sizeof(Array));
+
+	return_null_if(ret == NULL);
+
+	ret->items = NULL;
+
+	return ret;
+}
+
+/**
+ * Clone an array
+ * NOTE: The items keep pointing to the same data
+ *
+ * @param Array * arr
  *
  * @return Array *
  */
-Array * newArray(pointer data) {
-	Array * arr = (Array *) malloc(sizeof(Array));
+Array * Array_clone(Array * arr) {
+	Array * ret;
 
 	return_null_if(arr == NULL);
 
-	arr->data = data;
-	return arr;
+	ret = newArray();
+
+	ret->items = arr->items;
+
+	return ret;
+}
+
+/**
+ * Allocate a new array item
+ *
+ * @param const pointer data
+ *
+ * @return ArrayItem *
+ */
+ArrayItem * newArrayItem(const pointer data) {
+	ArrayItem * ret = (ArrayItem *) malloc(sizeof(ArrayItem));
+
+	return_null_if(ret == NULL);
+
+	ret->data = data;
+
+	return ret;
 }
 
 /**
@@ -23,71 +60,76 @@ Array * newArray(pointer data) {
  * @return size_t
  */
 size_t Array_length(Array * arr) {
-	size_t length = 1;
-	while(arr->next) {
-		length++;
-		arr = arr->next;
+	size_t length = 0;
+	ArrayItem * items = arr->items;
+	if( items ) {
+		do {
+			length++;
+		} while((items = items->next));
 	}
 	return length;
 }
 
 /**
- * Get the nth element from the array
+ * Get the nth element from the array, null if doesn't exist
  *
  * @param Array * arr
  * @param int index
  *
  * NOTE: we allow negative index
  *
- * @return Array *
+ * @return ArrayItem *
  */
-Array * Array_nth(Array * arr, int index) {
-	size_t length = Array_length(arr);
-	Array * item = arr;
+ArrayItem * Array_nth(Array * arr, int index) {
+	size_t length;
+	ArrayItem * items;
+
+	return_null_if(arr == NULL);
+
+	length = Array_length(arr);
+	items = arr->items;
+
+	// if in empty array
+	// return_null_if(items == NULL);
+	if( items == NULL ) {
+		return NULL;
+	}
 
 	if( index < 0 ) {
 		index += length;
 	}
 
-	return_null_if(index >= length || index < 0);
-
-	while(index--) {
-		item = item->next;
+	// return_null_if(index >= length || index < 0);
+	if( index >= length || index < 0 ) {
+		return NULL;
 	}
 
-	return item;
-}
+	while(index--) {
+		items = items->next;
+	}
 
-/**
- * Get the last element from the array
- *
- * @param Array * arr
- *
- * @return Array *
- */
-Array * Array_last(Array * arr) {
-	return Array_nth(arr, -1);
+	return items;
 }
 
 /**
  * Push data into the array
  *
  * @param Array * arr
- * @param pointer data
+ * @param const pointer data
  *
  * @return Array *
  */
-Array * Array_push(Array * arr, pointer data) {
-	Array * item = newArray(data);
-	Array * last;
+Array * Array_push(Array * arr, const pointer data) {
 
-	return_null_if(item == NULL);
+	return_null_if(arr == NULL);
 
-	last = Array_last(arr);
+	if( arr->items == NULL ) {
+		arr->items = newArrayItem(data);
+		return arr;
+	}
 
-	return_null_if(last == NULL);
+	Array_last(arr)->next = newArrayItem(data);
 
-	last->next = item;
 	return arr;
 }
 
@@ -96,14 +138,17 @@ Array * Array_push(Array * arr, pointer data) {
  *
  * @param Array * arr
  * @param int index
- * @param pointer data
+ * @param const pointer data
  *
  * @return pointer data
  */
-pointer Array_set(Array * arr, int index, pointer data) {
-	Array * item = Array_nth(arr, index);
+pointer Array_set(Array * arr, int index, const pointer data) {
+	ArrayItem * item;
 	size_t length;
 
+	return_null_if(arr == NULL);
+
+	item = Array_nth(arr, index);
 	// If the element does exist
 	if( item != NULL ) {
 		item->data = data;
@@ -123,6 +168,7 @@ pointer Array_set(Array * arr, int index, pointer data) {
 	}
 
 	Array_push(arr, data);
+
 	return data;
 }
 
@@ -135,7 +181,11 @@ pointer Array_set(Array * arr, int index, pointer data) {
  * @return pointer
  */
 pointer Array_get(Array * arr, int index) {
-	Array * item = Array_nth(arr, index);
+	ArrayItem * item;
+
+	return_null_if(arr == NULL);
+
+	item = Array_nth(arr, index);
 
 	return_null_if(item == NULL);
 
@@ -143,134 +193,172 @@ pointer Array_get(Array * arr, int index) {
 }
 
 /**
- * Removes the last element of the array and returns the array
+ * Removes the last element of the array and returns the data in it
+ * NOTE: You must manually free the data in the returned pointer
  *
  * @param Array * arr
  *
- * @return Array *
+ * @return pointer
  */
-Array * Array_pop(Array * arr) {
-	Array * penultimate = Array_nth(arr, -2);
+pointer Array_pop(Array * arr) {
+	size_t length;
+	ArrayItem * penultimate;
+	pointer ret;
 
-	Array_free(penultimate->next);
+	return_null_if(arr == NULL);
+
+	length = Array_length(arr);
+
+	// trying to pop from empty array
+	return_null_if(length == 0);
+
+	if( length == 1 ) {
+		ret = ArrayItem_free_without_data(arr->items);
+
+		arr->items = NULL;
+
+		return ret;
+	}
+
+	penultimate = Array_nth(arr, -2);
+
+	ret = ArrayItem_free_without_data(penultimate->next);
 
 	penultimate->next = NULL;
 
-	return arr;
+	return ret;
 }
 
 /**
- * Removes the first element from the array and returns the new array
+ * Removes the first element from the array and returns the data in it
  *
  * @param Array * arr
  *
- * @return Array *
+ * @return pointer
  */
-Array * Array_shift(Array * arr) {
-	Array * first = arr;
-	arr = arr->next;
+pointer Array_shift(Array * arr) {
+	ArrayItem * first;
 
-	return_null_if(first == NULL);
+	return_null_if(arr == NULL);
 
-	first->next = NULL;
+	first = arr->items;
 
-	return arr;
+	arr->items = arr->items->next;
+
+	return ArrayItem_free_without_data(first);
 }
 
 /**
- * Insert an element in the first position and return the new array
+ * Insert an element in the first position and return the length of the new array
+ * TODO: do not return length and return another thing (for performance)
  *
  * @param Array * arr
- * @param pointer data
+ * @param const pointer data
  *
- * @return Array *
+ * @return size_t
  */
-Array * Array_unshift(Array * arr, pointer data) {
-	Array * item = newArray(data);
-	item->next = arr;
-	return item;
+size_t Array_unshift(Array * arr, const pointer data) {
+	ArrayItem * item;
+
+	return_val_if(arr == NULL, 0);
+
+	item = newArrayItem(data);
+
+	item->next = arr->items;
+
+	arr->items = item;
+
+	return Array_length(arr);
 }
 
 /**
  * Delete a single element from array
+ * TODO: Look at return value
  *
  * @param Array * arr
  * @param int index
  *
- * @return Array * the new array
+ * @return void
  */
-Array * Array_delete(Array * arr, int index) {
-	Array * element;
-	if( index == 0 ) {
-		return Array_shift(arr);
-	}
+void Array_delete(Array * arr, int index) {
+	ArrayItem * element;
+
+	return_if(arr == NULL);
 
 	element = Array_nth(arr, index);
 
-	Array_nth(arr, index - 1)->next = element->next;
+	if( index == 0 ) {
+		arr->items = element->next;
+	} else {
+		Array_nth(arr, index - 1)->next = element->next;
+	}
 
-	Array_free(element);
-
-	return arr;
+	ArrayItem_free(element);
 }
 
 /**
- * Removes elements from an array and returns the new array
+ * Removes elements from an array and returns the new length
  *
  * @param int index starting item
  * @param size_t elements number of elements to remove
  *
- * @return Array * arr
+ * @return size_t
  */
-Array * Array_splice(Array * arr, int index, size_t elements) {
-	size_t length = Array_length(arr),
+size_t Array_splice(Array * arr, int index, size_t elements) {
+	size_t length,
 		i;
-	Array * prev;
-	Array * last_removed_element;
+	ArrayItem * prev;
+	ArrayItem * last_removed_element;
 
-	// TODO: allow negative index
-	return_val_if(index > length, arr);
-	return_val_if(elements + index > length, arr);
+	return_val_if(arr == NULL, 0);
+
+	length = Array_length(arr);
+
+	// this allows negative index
+	if( index < 0 ) {
+		index += length;
+	}
+
+	return_val_if(index >= length, length);
+	return_val_if(elements + index > length, length);
 
 	if( index == 0 ) {
 		for(i = 0; i < elements; i++) {
-			arr = Array_shift(arr);
+			Array_delete(arr, 0);
 		}
-		return arr;
+		return length - elements;
 	}
 
 	prev = Array_nth(arr, index - 1);
 
-	return_val_if(prev == NULL, arr);
+	return_val_if(prev == NULL, length);
 
 	last_removed_element = Array_nth(arr, index + elements - 1);
 
 
 	i = elements - 1; // want to keep the last one
 	while(i--) {
-		Array_free(Array_nth(arr, index + i));
+		ArrayItem_free(Array_nth(arr, index + i));
 	}
 
 	prev->next = last_removed_element->next;
 
-	Array_free(last_removed_element);
+	ArrayItem_free(last_removed_element);
 
-	return arr;
+	return length - elements;
 }
 
 /**
- * Concat two arrays
+ * Concat two arrays, modifying the first one
  *
  * @param Array * arr1
  * @param Array * arr2
  *
- * @return Array *
+ * @return Array * arr1
  */
 Array * Array_concat(Array * arr1, Array * arr2) {
+	Array_last(arr1)->next = arr2->items;
 
-	return_null_if(arr1 == NULL || arr2 == NULL);
-
-	Array_last(arr1)->next = arr2;
 	return arr1;
 }
 
@@ -278,14 +366,18 @@ Array * Array_concat(Array * arr1, Array * arr2) {
  * Check if element is in array
  *
  * @param Array * arr
- * @param pointer data
+ * @param const pointer data
  *
  * @return int -1 in error, index in success
  * NOTE: This performs strict pointer comparison
  */
-int Array_contains(Array * arr, pointer data) {
-	size_t len = Array_length(arr),
+int Array_contains(Array * arr, const pointer data) {
+	size_t len,
 		i = 0;
+
+	return_val_if(arr == NULL, -1);
+
+	len = Array_length(arr);
 	for(; i < len; i++) {
 		if( Array_get(arr, i) == data ) {
 			return i;
@@ -301,14 +393,18 @@ int Array_contains(Array * arr, pointer data) {
  * @param void (* callback)(pointer, size_t) a function that receives the data and the index
  */
 void Array_forEach(Array * arr, void (* callback)(pointer, size_t)) {
-	Array * current = arr;
+	ArrayItem * items;
 	size_t i = 0;
 
 	return_if(arr == NULL);
 
-	do {
-		callback(current->data, i++);
-	} while((current = current->next));
+	items = arr->items;
+
+	if( items ) {
+		do {
+			callback(items->data, i++);
+		} while((items = items->next));
+	}
 }
 
 /**
@@ -317,40 +413,64 @@ void Array_forEach(Array * arr, void (* callback)(pointer, size_t)) {
  * @param Array * arr
  * @param void (* callback)(Array *, size_t) a function that receives the data and the index
  */
-void Array_forEachItem(Array * arr, void (* callback)(Array *, size_t)) {
-	Array * current = arr;
+void Array_forEachItem(Array * arr, void (* callback)(ArrayItem *, size_t)) {
+	ArrayItem * items;
 	size_t i = 0;
 
 	return_if(arr == NULL);
 
-	do {
-		callback(current, i++);
-	} while((current = current->next));
+	items = arr->items;
+
+	if( items ) {
+		do {
+			callback(items, i++);
+		} while((items = items->next));
+	}
 }
 
 /**
  * Free an element memory
  *
- * @param Array * item
+ * @param ArrayItem * item
  *
  * @return void
  */
-void Array_free(Array * item) {
-	// NOTE: should we clean data?
-	free(item->data);
+void ArrayItem_free(ArrayItem * item) {
+	if( item != NULL ) {
+		free(item->data);
+	}
 	free(item);
 }
 
 /**
  * Free memory function for iteration
  *
- * @param Array * item
+ * @param ArrayItem * item
  * @param size_t index
  *
  * @return void
  */
-void Array_free_1(Array * item, size_t index) {
-	Array_free(item);
+void ArrayItem_free_1(ArrayItem * item, size_t index) {
+	return ArrayItem_free(item);
+}
+
+/**
+ * Free an element memory but return the data
+ *
+ * @param ArrayItem * item
+ *
+ * @return void
+ */
+pointer ArrayItem_free_without_data(ArrayItem * item) {
+	pointer ret;
+
+	return_null_if(item == NULL);
+
+	ret = item->data;
+
+	free(item);
+
+	return ret;
 }
 
 /**
@@ -361,5 +481,15 @@ void Array_free_1(Array * item, size_t index) {
  * @return void
  */
 void Array_destroy(Array * arr) {
-	Array_forEachItem(arr, Array_free_1);
+	size_t length;
+
+	return_if(arr == NULL);
+
+	length = Array_length(arr);
+
+	while(length--) {
+		ArrayItem_free(Array_nth(arr, length));
+	}
+
+	free(arr);
 }

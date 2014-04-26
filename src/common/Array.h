@@ -46,7 +46,6 @@ Array * newArray();
 
 /**
  * Clone an array
- * NOTE: The items keep pointing to the same data
  *
  * @param Array * arr
  *
@@ -248,7 +247,15 @@ void ArrayItem_free_1(ArrayItem * item, size_t index);
  */
 void Array_destroy(Array * arr);
 
-
+/**
+ * Sorts the array using the bubble sort algo
+ *
+ * @param Array * arr
+ * @param int (* compfunc) (pointer, pointer)
+ *
+ * @return void
+ */
+void Array_bsort(Array * arr, int (* compfunc)(pointer, pointer));
 
 CPP_END
 

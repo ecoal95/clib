@@ -17,7 +17,6 @@ Array * newArray() {
 
 /**
  * Clone an array
- * NOTE: The items keep pointing to the same data
  *
  * @param Array * arr
  *
@@ -25,12 +24,18 @@ Array * newArray() {
  */
 Array * Array_clone(Array * arr) {
 	Array * ret;
+	ArrayItem * items;
 
 	return_null_if(arr == NULL);
 
 	ret = newArray();
 
-	ret->items = arr->items;
+	if( arr->items != NULL ) {
+		items = arr->items;
+		do {
+			Array_push(ret, items->data);
+		} while((items = items->next));
+	}
 
 	return ret;
 }
@@ -492,4 +497,42 @@ void Array_destroy(Array * arr) {
 	}
 
 	free(arr);
+}
+
+
+/**
+ * Sorts the array using the bubble sort algo
+ *
+ * @param Array * arr
+ * @param int (* compfunc) (pointer, pointer)
+ *
+ * @return void
+ */
+void Array_bsort(Array * arr, int (* compfunc)(pointer, pointer)) {
+	size_t
+		length,
+		i,
+		j;
+
+	ArrayItem * current_item;
+	ArrayItem * compared_item;
+	pointer temp_data;
+
+	return_if(arr == NULL);
+	return_if(compfunc == NULL);
+
+	length = Array_length(arr);
+
+	for(i = 0; i < length; i++) {
+		for(j = 0; j < length - i - 1; j++) {
+			current_item = Array_nth(arr, j);
+			compared_item = current_item->next;
+			if( compfunc(current_item->data, compared_item->data) <= 0 ) {
+				// Instead of swapping the whole element we just swap the data
+				temp_data = current_item->data;
+				current_item->data = compared_item->data;
+				compared_item->data = temp_data;
+			}
+		}
+	}
 }

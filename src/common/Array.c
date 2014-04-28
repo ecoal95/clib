@@ -292,6 +292,7 @@ void Array_delete(Array * arr, int index) {
 
 	element = Array_nth(arr, index);
 
+	// TODO: Check for negative index to the first element, which wont work
 	if( index == 0 ) {
 		arr->items = element->next;
 	} else {

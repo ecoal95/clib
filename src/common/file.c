@@ -19,11 +19,12 @@ size_t FILE_size(FILE *src) {
  * TODO: Consider changing return type to boolean
  *
  * @param FILE * file
- * @param int (*callback)(char *) callback function that receives the line and returns 0 on success
+ * @param int (*callback)(char *, pointer) callback function that receives the line and the custom data, returns 0 on success
+ * @param pointer data custom data
  *
- * @return int (< 0 on error, last success return on success)
+ * @return int (< 0 on error)
  */
-int FILE_eachLine(FILE * file, int (*callback)(char *)) {
+int FILE_eachLine(FILE * file, int (*callback)(char *, pointer), pointer data) {
 	static char line[FILE_LINE_BASE_LENGTH];
 	char * current_line = NULL;
 	size_t current_line_len;
@@ -52,7 +53,7 @@ int FILE_eachLine(FILE * file, int (*callback)(char *)) {
 			current_line[current_line_len - 1] = '\0';
 		}
 
-		if( (ret = callback(current_line)) < 0 ) {
+		if( (ret = callback(current_line, data)) < 0 ) {
 			free(current_line);
 			return ret;
 		}
@@ -203,17 +204,18 @@ boolean file_copy(const char * dest, const char * src) {
  * Make a callback each line of the file
  *
  * @param const char * file
- * @param int (*callback)(char *) callback function that receives the line and returns 0 on success
+ * @param int (*callback)(char *, pointer) callback function that receives the line and the custom data, and returns 0 on success
+ * @param pointer data custom data
  *
  * @return int (< 0 on error)
  */
-int file_eachLine(const char * src, int (*callback)(char *)) {
+int file_eachLine(const char * src, int (*callback)(char *, pointer), pointer data) {
 	int ret;
 	FILE * file = fopen(src, "r");
 
 	return_val_if(file == NULL, -1);
 
-	ret = FILE_eachLine(file, callback);
+	ret = FILE_eachLine(file, callback, data);
 
 	fclose(file);
 

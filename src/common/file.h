@@ -24,12 +24,12 @@ size_t FILE_size(FILE *src);
  * TODO: Consider changing return type to boolean
  *
  * @param FILE * file
- * @param int (*callback)(char *) callback function that receives the line and returns 0 on success
+ * @param int (*callback)(char *, pointer) callback function that receives the line and the custom data, returns 0 on success
+ * @param pointer data custom data
  *
  * @return int (< 0 on error)
  */
-int FILE_eachLine(FILE * file, int (*callback)(char *));
-
+int FILE_eachLine(FILE * file, int (*callback)(char *, pointer), pointer data);
 
 /**
  * Copies two files
@@ -91,11 +91,12 @@ boolean file_copy(const char * dest, const char * src);
  * Make a callback each line of the file
  *
  * @param const char * file
- * @param int (*callback)(char *) callback function that receives the line and returns 0 on success
+ * @param int (*callback)(char *, pointer) callback function that receives the line and the custom data, and returns 0 on success
+ * @param pointer data custom data
  *
  * @return int (< 0 on error)
  */
-int file_eachLine(const char * file, int (*callback)(char *));
+int file_eachLine(const char * file, int (*callback)(char *, pointer), pointer data);
 
 /**
  * Returns the full content of a file

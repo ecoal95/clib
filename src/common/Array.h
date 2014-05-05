@@ -198,9 +198,10 @@ int Array_contains(Array * arr, const pointer data);
  * Loop through each array element data, calling callback
  *
  * @param Array * arr
- * @param void (* callback)(pointer, size_t) a function that receives the data and the index
+ * @param void (* callback)(pointer, size_t, pointer) a function that receives the data, the index and the custom data
+ * @param pointer data
  */
-void Array_forEach(Array * arr, void (* callback)(pointer, size_t));
+void Array_forEach(Array * arr, void (* callback)(pointer, size_t, pointer), pointer data);
 
 /**
  * Loop through each array element, calling callback

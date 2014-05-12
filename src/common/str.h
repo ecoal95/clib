@@ -255,6 +255,32 @@ char * str_trim(char * str);
 char * str_strip(char * str);
 
 /**
+ * Splits string into multiple strings delimited by separator
+ *
+ * TODO: optimize, and avoid passing length by reference:
+ *       (use `Array`?)
+ *
+ * @param const char * orig_str
+ * @param const char * separator
+ * @param size_t * ret_length
+ *
+ * @return char **
+ */
+char ** str_split(const char * orig_str, const char * separator, size_t * ret_length);
+
+#ifdef __ARRAY_STRUCT_H
+/**
+ * Splits string into multiple strings delimited by separator
+ *
+ * @param const char * orig_str
+ * @param const char * separator
+ *
+ * @return Array *
+ */
+Array * str_split_array(const char * orig_str, const char * separator);
+#endif
+
+/**
  * Get a random string
  *
  * @param char * dest
@@ -316,9 +342,9 @@ size_t str_wordcount(const char * str);
 #define __parseFloat_2(str, end) (strtod(str, end))
 #define __parseFloat_1(str) (strtod(str, NULL))
 #ifdef C99
-#define parseFloat(...) GET_VA_MACRO_2(__VA_ARGS__,  __parseInt_2, __parseInt_1)(__VA_ARGS__)
+#define parseFloat(...) GET_VA_MACRO_2(__VA_ARGS__,  __parseFloat_2, __parseFloat_1)(__VA_ARGS__)
 #else
-#define parseFloat(args...) GET_VA_MACRO_2(args, __parseInt_2, __parseInt_1)(args)
+#define parseFloat(args...) GET_VA_MACRO_2(args, __parseFloat_2, __parseFloat_1)(args)
 #endif
 
 /**

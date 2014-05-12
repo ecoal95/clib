@@ -397,6 +397,85 @@ char * str_strip(char * str) {
 	return str;
 }
 
+/**
+ * Splits string into multiple strings delimited by separator
+ *
+ * TODO: optimize, and avoid passing length by reference:
+ *       (use `Array`?)
+ *
+ * @param const char * orig_str
+ * @param const char * separator
+ * @param size_t * ret_length
+ *
+ * @return char **
+ */
+char ** str_split(const char * orig_str, const char * separator, size_t * ret_length) {
+	char ** ret;
+	char * str;
+	char * temp;
+	char * token;
+	size_t i = 0;
+
+	return_null_if(orig_str == NULL);
+	return_null_if(separator == NULL);
+
+	str = str_clone(orig_str);
+	temp = str;
+	*ret_length = 0;
+
+	// First we count the number of substrings
+	while((temp = strstr(temp, separator))) {
+		(*ret_length)++;
+		temp++;
+	}
+
+	ret = (char **) malloc(sizeof(char *) * (*ret_length));
+
+	return_null_if(ret == NULL);
+
+	token = strtok(str, separator);
+
+	while(token != NULL) {
+		ret[i++] = token;
+		token = strtok(NULL, separator);
+	}
+
+	return ret;
+}
+
+#ifdef __ARRAY_STRUCT_H
+/**
+ * Splits string into multiple strings delimited by separator
+ *
+ * @param const char * orig_str
+ * @param const char * separator
+ *
+ * @return Array *
+ */
+Array * str_split_array(const char * orig_str, const char * separator) {
+	Array * ret;
+	char * str;
+	char * token;
+
+	return_null_if(orig_str == NULL);
+	return_null_if(separator == NULL);
+
+	ret = newArray();
+
+	str = str_clone(orig_str);
+
+	return_null_if(ret == NULL);
+
+	token = strtok(str, separator);
+
+	while(token != NULL) {
+		Array_push(ret, token);
+		token = strtok(NULL, separator);
+	}
+
+	return ret;
+}
+#endif
 
 /**
  * Get a random string

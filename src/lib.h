@@ -49,23 +49,23 @@
 
 #if __LIB_JUST_CORE == 0
 
+#include "common/Array.h"
+#include "common/Hash.h"
 #include "common/array.h"
 #include "common/str.h"
 #include "common/file.h"
 // #include "date.h"
 
-#include "common/Array.h"
-#include "common/Hash.h"
 
 #if __LIB_AUTO_INCLUDE == 1
 
+#include "common/Array.c"
+#include "common/Hash.c"
 #include "common/array.c"
 #include "common/str.c"
 #include "common/file.c"
 // #include "date.c"
 
-#include "common/Array.c"
-#include "common/Hash.c"
 
 #endif
 // __LIB_AUTO_INCLUDE

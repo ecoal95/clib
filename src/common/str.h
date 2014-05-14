@@ -260,6 +260,7 @@ char * str_strip(char * str);
  * TODO: optimize, and avoid passing length by reference:
  *       (use `Array`?)
  * NOTE: `str` gets modified, so clone if neccesary
+ *       If you want to free memory, you should free(str) instead of freeing the parts
  *
  * @param char * str
  * @param const char * separator
@@ -272,6 +273,9 @@ char ** str_split(char * str, const char * separator, size_t * ret_length);
 #ifdef __ARRAY_STRUCT_H
 /**
  * Splits string into multiple strings delimited by separator
+ *
+ * NOTE: `str` gets modified, so clone if neccesary
+ *       If you want to free memory, you should free(str) instead of freeing the parts
  *
  * @param char * str
  * @param const char * separator

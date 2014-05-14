@@ -402,26 +402,25 @@ char * str_strip(char * str) {
  *
  * TODO: optimize, and avoid passing length by reference:
  *       (use `Array`?)
+ * NOTE: `str` gets modified, so clone if neccesary
  *
- * @param const char * orig_str
+ * @param char * str
  * @param const char * separator
  * @param size_t * ret_length
  *
  * @return char **
  */
-char ** str_split(const char * orig_str, const char * separator, size_t * ret_length) {
+char ** str_split(char * str, const char * separator, size_t * ret_length) {
 	char ** ret;
-	char * str;
 	char * temp;
 	char * token;
 	size_t i = 0;
 
-	return_null_if(orig_str == NULL);
+	return_null_if(str == NULL);
 	return_null_if(separator == NULL);
 
-	str = str_clone(orig_str);
 	temp = str;
-	*ret_length = 0;
+	*ret_length = 1; // even if string is empty, there's at least one token (the whole string)
 
 	// First we count the number of substrings
 	while((temp = strstr(temp, separator))) {
@@ -447,22 +446,19 @@ char ** str_split(const char * orig_str, const char * separator, size_t * ret_le
 /**
  * Splits string into multiple strings delimited by separator
  *
- * @param const char * orig_str
+ * @param char * str
  * @param const char * separator
  *
  * @return Array *
  */
-Array * str_split_array(const char * orig_str, const char * separator) {
+Array * str_split_array(char * str, const char * separator) {
 	Array * ret;
-	char * str;
 	char * token;
 
-	return_null_if(orig_str == NULL);
+	return_null_if(str == NULL);
 	return_null_if(separator == NULL);
 
 	ret = newArray();
-
-	str = str_clone(orig_str);
 
 	return_null_if(ret == NULL);
 

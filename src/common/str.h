@@ -259,25 +259,26 @@ char * str_strip(char * str);
  *
  * TODO: optimize, and avoid passing length by reference:
  *       (use `Array`?)
+ * NOTE: `str` gets modified, so clone if neccesary
  *
- * @param const char * orig_str
+ * @param char * str
  * @param const char * separator
  * @param size_t * ret_length
  *
  * @return char **
  */
-char ** str_split(const char * orig_str, const char * separator, size_t * ret_length);
+char ** str_split(char * str, const char * separator, size_t * ret_length);
 
 #ifdef __ARRAY_STRUCT_H
 /**
  * Splits string into multiple strings delimited by separator
  *
- * @param const char * orig_str
+ * @param char * str
  * @param const char * separator
  *
  * @return Array *
  */
-Array * str_split_array(const char * orig_str, const char * separator);
+Array * str_split_array(char * str, const char * separator);
 #endif
 
 /**

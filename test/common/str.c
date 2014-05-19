@@ -39,12 +39,20 @@ static char * TEST_substr() {
 	return 0;
 }
 
+static char * TEST_str_trim() {
+	char str[] = "  Hola, mundo!  ";
+
+	mu_assert("ERROR: NOT WORKING CORRECTLY", strcmp(str_trim(str), "Hola, mundo!") == 0);
+
+	return 0;
+}
 
 static char * all_tests() {
 	mu_run_test(TEST_str_strcount);
 	mu_run_test(TEST_str_replace);
 	mu_run_test(TEST_substr);
 	mu_run_test(TEST_str_wordcount);
+	mu_run_test(TEST_str_trim);
 	return 0;
 }
 

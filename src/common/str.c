@@ -312,10 +312,15 @@ char * str_trimcharright(char *str, const char c) {
  */
 char * str_trimcharleft(char * str, const char c) {
 	size_t length = strlen(str),
+		positions = 0,
 		i = 0;
 
 	while( str[i++] == c && i < length ) {
-		str++;
+		positions++;
+	}
+
+	if( positions ) {
+		memmove(str, str + positions, length - positions + 1);
 	}
 	return str;
 }
@@ -383,9 +388,10 @@ char * str_trim(char * str) {
  */
 char * str_strip(char * str) {
 	size_t last = strlen(str) - 1;
+	size_t positions = 0;
 
 	while (isspace(str[0])) {
-		str++;
+		positions++;
 	}
 
 	while (isspace(str[last])) {
@@ -393,6 +399,10 @@ char * str_strip(char * str) {
 	}
 
 	str[last + 1] = '\0';
+
+	if( positions ) {
+		memmove(str, str + positions, last + 1 - positions + 1);
+	}
 
 	return str;
 }

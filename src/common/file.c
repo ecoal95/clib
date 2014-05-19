@@ -48,10 +48,10 @@ int FILE_eachLine(FILE * file, int (*callback)(char *, pointer), pointer data) {
 		// if line is not over continue reading
 		if( current_line[current_line_len - 1] != EOL ) {
 			continue;
-		} else {
-			// remove eol
-			current_line[current_line_len - 1] = '\0';
 		}
+
+		// remove eol
+		current_line[current_line_len - 1] = '\0';
 
 		if( (ret = callback(current_line, data)) < 0 ) {
 			free(current_line);

@@ -154,24 +154,28 @@ size_t Array_unshift(Array * arr, const pointer data);
 
 /**
  * Delete a single element from array
- * TODO: Look at return value
+ * If with_data is true, returns the element value
+ * else returns null
  *
  * @param Array * arr
  * @param int index
+ * @param boolean with_data
  *
  * @return void
  */
-void Array_delete(Array * arr, int index);
+pointer Array_delete(Array * arr, int index, boolean with_data);
 
 /**
  * Removes elements from an array and returns the new length
  *
+ * @param Array * arr
  * @param int index starting item
  * @param size_t elements number of elements to remove
+ * @param boolean with_data
  *
  * @return size_t
  */
-size_t Array_splice(Array * arr, int index, size_t elements);
+size_t Array_splice(Array * arr, int index, size_t elements, boolean with_data);
 
 /**
  * Concat two arrays, modifying the first one
@@ -215,29 +219,11 @@ void Array_forEachItem(Array * arr, void (* callback)(ArrayItem *, size_t));
  * Free an element memory
  *
  * @param ArrayItem * item
+ * @param boolean with_data
  *
  * @return void
  */
-void ArrayItem_free(ArrayItem * item);
-
-/**
- * Free an element memory but return the data
- *
- * @param ArrayItem * item
- *
- * @return void
- */
-pointer ArrayItem_free_without_data(ArrayItem * item);
-
-/**
- * Free memory function for iteration
- *
- * @param ArrayItem * item
- * @param size_t index
- *
- * @return void
- */
-void ArrayItem_free_1(ArrayItem * item, size_t index);
+void ArrayItem_free(ArrayItem * item, boolean with_data);
 
 /**
  * Remove an array with all its items
@@ -246,7 +232,7 @@ void ArrayItem_free_1(ArrayItem * item, size_t index);
  *
  * @return void
  */
-void Array_destroy(Array * arr);
+void Array_destroy(Array * arr, boolean with_data);
 
 /**
  * Sorts the array using the bubble sort algo

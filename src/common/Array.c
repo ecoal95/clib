@@ -218,7 +218,7 @@ pointer Array_pop(Array * arr) {
 	return_null_if(length == 0);
 
 	if( length == 1 ) {
-		ret = ArrayItem_free_without_data(arr->items);
+		ret = ArrayItem_free(arr->items, FALSE);
 
 		arr->items = NULL;
 
@@ -227,7 +227,7 @@ pointer Array_pop(Array * arr) {
 
 	penultimate = Array_nth(arr, -2);
 
-	ret = ArrayItem_free_without_data(penultimate->next);
+	ret = ArrayItem_free(penultimate->next, FALSE);
 
 	penultimate->next = NULL;
 
@@ -250,7 +250,7 @@ pointer Array_shift(Array * arr) {
 
 	arr->items = arr->items->next;
 
-	return ArrayItem_free_without_data(first);
+	return ArrayItem_free(first, FALSE);
 }
 
 /**
@@ -278,17 +278,19 @@ size_t Array_unshift(Array * arr, const pointer data) {
 
 /**
  * Delete a single element from array
- * TODO: Look at return value
+ * If with_data is true, returns the element value
+ * else returns null
  *
  * @param Array * arr
  * @param int index
+ * @param boolean with_data
  *
  * @return void
  */
-void Array_delete(Array * arr, int index) {
+pointer Array_delete(Array * arr, int index, boolean with_data) {
 	ArrayItem * element;
 
-	return_if(arr == NULL);
+	return_null_if(arr == NULL);
 
 	element = Array_nth(arr, index);
 
@@ -299,18 +301,20 @@ void Array_delete(Array * arr, int index) {
 		Array_nth(arr, index - 1)->next = element->next;
 	}
 
-	ArrayItem_free(element);
+	return ArrayItem_free(element, with_data);
 }
 
 /**
  * Removes elements from an array and returns the new length
  *
+ * @param Array * arr
  * @param int index starting item
  * @param size_t elements number of elements to remove
+ * @param boolean with_data
  *
  * @return size_t
  */
-size_t Array_splice(Array * arr, int index, size_t elements) {
+size_t Array_splice(Array * arr, int index, size_t elements, boolean with_data) {
 	size_t length,
 		i;
 	ArrayItem * prev;
@@ -330,7 +334,7 @@ size_t Array_splice(Array * arr, int index, size_t elements) {
 
 	if( index == 0 ) {
 		for(i = 0; i < elements; i++) {
-			Array_delete(arr, 0);
+			Array_delete(arr, 0, with_data);
 		}
 		return length - elements;
 	}
@@ -344,12 +348,12 @@ size_t Array_splice(Array * arr, int index, size_t elements) {
 
 	i = elements - 1; // want to keep the last one
 	while(i--) {
-		ArrayItem_free(Array_nth(arr, index + i));
+		ArrayItem_free(Array_nth(arr, index + i), with_data);
 	}
 
 	prev->next = last_removed_element->next;
 
-	ArrayItem_free(last_removed_element);
+	ArrayItem_free(last_removed_element, with_data);
 
 	return length - elements;
 }
@@ -439,45 +443,25 @@ void Array_forEachItem(Array * arr, void (* callback)(ArrayItem *, size_t)) {
  * Free an element memory
  *
  * @param ArrayItem * item
+ * @param boolean with_data
  *
- * @return void
+ * @return pointer the data if with_data was TRUE
  */
-void ArrayItem_free(ArrayItem * item) {
-	if( item != NULL ) {
-		free(item->data);
-	}
-	free(item);
-}
-
-/**
- * Free memory function for iteration
- *
- * @param ArrayItem * item
- * @param size_t index
- *
- * @return void
- */
-void ArrayItem_free_1(ArrayItem * item, size_t index) {
-	return ArrayItem_free(item);
-}
-
-/**
- * Free an element memory but return the data
- *
- * @param ArrayItem * item
- *
- * @return void
- */
-pointer ArrayItem_free_without_data(ArrayItem * item) {
-	pointer ret;
+pointer ArrayItem_free(ArrayItem * item, boolean with_data) {
+	pointer data;
 
 	return_null_if(item == NULL);
 
-	ret = item->data;
+	data = item->data;
+
+	if ( with_data && data != NULL ) {
+		free(item->data);
+		data = NULL;
+	}
 
 	free(item);
 
-	return ret;
+	return data;
 }
 
 /**
@@ -487,7 +471,7 @@ pointer ArrayItem_free_without_data(ArrayItem * item) {
  *
  * @return void
  */
-void Array_destroy(Array * arr) {
+void Array_destroy(Array * arr, boolean with_data) {
 	size_t length;
 
 	return_if(arr == NULL);
@@ -495,7 +479,7 @@ void Array_destroy(Array * arr) {
 	length = Array_length(arr);
 
 	while(length--) {
-		ArrayItem_free(Array_nth(arr, length));
+		ArrayItem_free(Array_nth(arr, length), with_data);
 	}
 
 	free(arr);

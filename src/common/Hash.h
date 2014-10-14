@@ -4,11 +4,12 @@
 CPP_START
 
 #include "../core/core.h"
+#include "../Array.h"
 
 typedef struct Hash {
 	size_t length;
-	char * * keys;
-	pointer * data;
+	Array * keys;
+	Array * values;
 } Hash;
 
 /**
@@ -58,6 +59,16 @@ void Hash_iterate(Hash * hash, void (* callback)(char *, pointer));
  * @param Hash * hash
  */
 void Hash_destroy(Hash * hash);
+
+/**
+ * Merge two hashes
+ *
+ * @param Hash * hash_1
+ * @param Hash * hash_2
+ *
+ * @return Hash *
+ */
+Hash * Hash_merge(Hash * hash_1, Hash * hash_2);
 
 CPP_END
 #endif

@@ -1,8 +1,8 @@
 #ifndef __DATE_H
 #define __DATE_H
 
-// CPP_START
-// #include "../core/core.h"
+CPP_START
+#include "../core/core.h"
 
 #include <time.h>
 
@@ -23,13 +23,7 @@ typedef struct tm Date;
  *
  * @return Date *
  */
-Date * newDate() {
-	time_t t = time(NULL);
-
-	// return_null_if(t == (time_t) -1);
-
-	return localtime(&t);
-}
+Date * newDate();
 
 /**
  * Get a date from a string
@@ -38,9 +32,7 @@ Date * newDate() {
  *
  * @return Date *
  */
-Date * Date__parse(const char * str) {
-	return (Date *) getdate(str);
-}
+Date * Date__parse(const char * str);
 
 /**
  * Get a date's time
@@ -49,9 +41,7 @@ Date * Date__parse(const char * str) {
  *
  * @return time_t
  */
-time_t Date_getTime(Date * self) {
-	return mktime(self);
-}
+time_t Date_getTime(Date * self);
 
 /**
  * Set a date's time
@@ -61,17 +51,7 @@ time_t Date_getTime(Date * self) {
  *
  * @return Date *
  */
-Date * Date_setTime(Date * self, time_t time) {
-	self->tm_sec = time;
-	self->tm_mon = 0;
-	self->tm_mday = 0;
-	self->tm_year = 1970;
-
-	mktime(self);
-
-	return self;
-}
-
+Date * Date_setTime(Date * self, time_t time);
 
 /** Interval types */
 typedef enum DateIntervalType {
@@ -90,28 +70,7 @@ typedef enum DateIntervalType {
  *
  * @return Date *
  */
-Date * Date_addInterval(Date * self, int value, DateIntervalType interval_type) {
-
-	switch ( interval_type ) {
-		case DATE_INTERVAL_TYPE_SECONDS:
-			self->tm_sec += value;
-			break;
-		case DATE_INTERVAL_TYPE_DAYS:
-			self->tm_mday += value;
-			break;
-		case DATE_INTERVAL_TYPE_MONTHS:
-			self->tm_mon += value;
-			break;
-		case DATE_INTERVAL_TYPE_YEARS:
-			self->tm_year += value;
-			break;
-	}
-
-
-	mktime(self);
-
-	return self;
-}
+Date * Date_addInterval(Date * self, int value, DateIntervalType interval_type);
 
 /**
  * Return a date formatted
@@ -121,18 +80,8 @@ Date * Date_addInterval(Date * self, int value, DateIntervalType interval_type) 
  *
  * @return char *
  */
-char * Date_formatted(Date * self, const char * format) {
-	char * ret;
+char * Date_formatted(Date * self, const char * format);
 
-	ret = malloc(DATE_FORMATTED_MAX_LENGTH /* * sizeof(char) */);
-
-	// If size was exceeded
-	// return_null_if(strftime(ret, DATE_FORMATTED_MAX_LENGTH, format, self) == 0);
-
-	return ret;
-}
-
-
-// CPP_END
+CPP_END
 
 #endif

@@ -67,10 +67,10 @@ ArrayItem * newArrayItem(const pointer data) {
 size_t Array_length(Array * arr) {
 	size_t length = 0;
 	ArrayItem * items = arr->items;
-	if( items ) {
+	if ( items ) {
 		do {
 			length++;
-		} while((items = items->next));
+		} while ( (items = items->next) );
 	}
 	return length;
 }
@@ -95,21 +95,15 @@ ArrayItem * Array_nth(Array * arr, int index) {
 	items = arr->items;
 
 	// if in empty array
-	// return_null_if(items == NULL);
-	if( items == NULL ) {
-		return NULL;
-	}
+	return_null_if(items == NULL);
 
-	if( index < 0 ) {
+	if ( index < 0 ) {
 		index += length;
 	}
 
-	// return_null_if(index >= length || index < 0);
-	if( index >= length || index < 0 ) {
-		return NULL;
-	}
+	return_null_if(index >= length || index < 0);
 
-	while(index--) {
+	while ( index-- ) {
 		items = items->next;
 	}
 
@@ -384,8 +378,8 @@ int Array_contains(Array * arr, const pointer data) {
 	return_val_if(arr == NULL, -1);
 
 	len = Array_length(arr);
-	for(; i < len; i++) {
-		if( Array_get(arr, i) == data ) {
+	for ( ; i < len; i++ ) {
+		if ( Array_get(arr, i) == data ) {
 			return i;
 		}
 	}

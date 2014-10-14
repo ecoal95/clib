@@ -7,7 +7,8 @@
 Hash * newHash() {
 	Hash * hash = malloc(sizeof(Hash));
 
-	hash->length = 0;
+	hash->keys = newArray();
+	hash->values = newArray();
 
 	return hash;
 }
@@ -21,28 +22,21 @@ Hash * newHash() {
  *
  * @return hash
  */
-Hash * Hash_set(Hash * hash, const char * key, pointer data) {
+Hash * Hash_set(Hash * self, const char * key, pointer data) {
 	size_t i = 0,
-		len = hash->length;
+		len = Array_length(self->keys);
 
-	for(; i < len; i++ ) {
-		if(strcmp(hash->keys[i], key) == 0) {
+	for ( ; i < len; i++ ) {
+		if ( strcmp(Array_get(self->keys, i), key) == 0 ) {
 			break;
 		}
 	}
 
-	if( i < len ) {
-		hash->data[i] = data;
+	if ( i < len ) {
+		Array_set(self->values, i, data);
 	} else {
-		hash->length++;
-
-		hash->keys = realloc(hash->keys, sizeof(char *) * hash->length);
-		hash->data = realloc(hash->data, sizeof(void *) * hash->length);
-
-		hash->keys[len] = malloc(strlen(key) + 1);
-		strcpy(hash->keys[len], key);
-
-		hash->data[len] = data;
+		Array_push(self->keys, str_clone(key));
+		Array_push(self->values, data);
 	}
 
 	return hash;
@@ -100,4 +94,24 @@ void Hash_destroy(Hash * hash) {
 		free(hash->data[i]);
 	}
 	free(hash);
+}
+
+/**
+ * Merge two hashes
+ *
+ * @param Hash * hash_1
+ * @param Hash * hash_2
+ *
+ * @return Hash *
+ */
+Hash * Hash_merge(Hash * hash_1, Hash * hash_2) {
+	size_t len = hash_2->length,
+		i = 0;
+
+	/* TODO: This is expensive, consider change hash structure to use linked lists like `Array` */
+	for ( ; i < len; i++ ) {
+		Hash_set(hash_1, hash_2->keys[i], hash_2->data[i]);
+	}
+
+	return hash_1;
 }

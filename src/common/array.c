@@ -31,7 +31,7 @@ void * array_create(size_t size, size_t elementsize) {
  */
 void * array_clone_raw(const void * array, const size_t length, const size_t elementsize) {
 	void * ret = malloc(length * elementsize);
-	
+
 	return_null_if(ret == NULL);
 
 	memcpy(ret, array, length * elementsize);
@@ -418,7 +418,7 @@ void array_read_string(char * * array, size_t length) {
 	size_t i = 0;
 	for(; i < length; i++) {
 		array[i] = malloc(ARRAY_STRING_LENGTH);
-		printf("[%d]:", i);
+		printf("[%zu]:", i);
 		fgets(array[i], ARRAY_STRING_LENGTH, stdin);
 		utils_ib_clean();
 	}

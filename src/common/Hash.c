@@ -1,4 +1,16 @@
 #include "Hash.h"
+
+/**
+ * TODO: Review implementation
+ * Maybe store both pointers (key and value) in the same place will be cool for perf
+ *
+ * Something like:
+typedef struct HashValue {
+	char * key;
+	pointer value;
+} HashValue;
+ * Instead of both arrays
+ */
 /**
  * Alloc a new hash
  *
@@ -39,7 +51,7 @@ Hash * Hash_set(Hash * self, const char * key, pointer data) {
 		Array_push(self->values, data);
 	}
 
-	return hash;
+	return self;
 }
 
 /**
@@ -50,17 +62,18 @@ Hash * Hash_set(Hash * self, const char * key, pointer data) {
  *
  * @return pointer
  */
-pointer Hash_get(Hash * hash, const char * key) {
-	size_t i = 0,
-		len = hash->length;
-	for(; i < len; i++ ) {
-		if(strcmp(hash->keys[i], key) == 0) {
+pointer Hash_get(Hash * self, const char * key) {
+	size_t i,
+		len = self->length;
+	void * data;
+	ARRAY_EACH_WITH_INDEX(self->keys, data, i,
+		if(strcmp((char *) data, key) == 0) {
 			break;
 		}
-	}
+	);
 
 	if( i < len ) {
-		return hash->data[i];
+		return Array_nth(self->values, i);
 	}
 
 	return NULL;
@@ -76,24 +89,20 @@ void Hash_iterate(Hash * hash, void (* callback)(char *, pointer)) {
 	size_t len = hash->length,
 		i = 0;
 	for(; i < len; i++) {
-		callback(hash->keys[i], hash->data[i]);
+		callback((char *) Array_nth(hash->keys, i), Array_nth(hash->values, i));
 	}
 }
 
 /**
  * Deallocate hash
  *
- * @param Hash * hash
+ * @param Hash * self
+ * @param boolean with_data
  */
-void Hash_destroy(Hash * hash) {
-	size_t len = hash->length,
-		i = 0;
-	for(; i < len; i++) {
-		free(hash->keys[i]);
-		// Should we?
-		free(hash->data[i]);
-	}
-	free(hash);
+void Hash_destroy(Hash * self, boolean with_data) {
+	Array_destroy(self->keys, TRUE);
+	Array_destroy(self->values, with_data);
+	free(self);
 }
 
 /**
@@ -108,9 +117,8 @@ Hash * Hash_merge(Hash * hash_1, Hash * hash_2) {
 	size_t len = hash_2->length,
 		i = 0;
 
-	/* TODO: This is expensive, consider change hash structure to use linked lists like `Array` */
 	for ( ; i < len; i++ ) {
-		Hash_set(hash_1, hash_2->keys[i], hash_2->data[i]);
+		Hash_set(hash_1, (char *) Array_nth(hash_2->keys, i), Array_nth(hash_2->values, i));
 	}
 
 	return hash_1;

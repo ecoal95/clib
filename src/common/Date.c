@@ -21,7 +21,7 @@ Date * newDate() {
  * @return Date *
  */
 Date * Date__parse(const char * str) {
-	return (Date *) getdate(str);
+	return getdate(str);
 }
 
 /**
@@ -54,14 +54,6 @@ Date * Date_setTime(Date * self, time_t time) {
 	return self;
 }
 
-
-/** Interval types */
-typedef enum DateIntervalType {
-	DATE_INTERVAL_TYPE_SECONDS,
-	DATE_INTERVAL_TYPE_DAYS,
-	DATE_INTERVAL_TYPE_MONTHS,
-	DATE_INTERVAL_TYPE_YEARS
-} DateIntervalType;
 
 /**
  * Add interval to a date

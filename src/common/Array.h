@@ -24,6 +24,32 @@ typedef struct Array {
 
 
 /**
+ * Optimized loop through data
+ */
+#define ARRAY_EACH(array, data, ...) do { \
+	ArrayItem * item = array->items; \
+	if ( item == NULL ) { \
+		break; \
+	} \
+	do { \
+		data = item->data; \
+		__VA_ARGS__ \
+	} while( (item = item->next) ); \
+} while ( 0 )
+
+#define ARRAY_EACH_WITH_INDEX(array, data, index, ...) do { \
+	ArrayItem * item = array->items; \
+	index = 0; \
+	if ( item == NULL ) { \
+		break; \
+	} \
+	do { \
+		data = item->data; \
+		__VA_ARGS__ \
+		index++; \
+	} while ( (item = item->next) ); \
+} while ( 0 )
+/**
  * Check emptyness of array
  *
  * @param Array * array
@@ -71,6 +97,7 @@ ArrayItem * newArrayItem(const pointer data);
  */
 size_t Array_length(Array * arr);
 
+
 /**
  * Get the nth element from the array
  *
@@ -78,6 +105,7 @@ size_t Array_length(Array * arr);
  * @param int index
  *
  * NOTE: we allow negative index
+ * TODO: Optimize this
  *
  * @return ArrayItem *
  */
@@ -221,9 +249,9 @@ void Array_forEachItem(Array * arr, void (* callback)(ArrayItem *, size_t));
  * @param ArrayItem * item
  * @param boolean with_data
  *
- * @return void
+ * @return pointer the data if with_data was TRUE
  */
-void ArrayItem_free(ArrayItem * item, boolean with_data);
+pointer ArrayItem_free(ArrayItem * item, boolean with_data);
 
 /**
  * Remove an array with all its items

@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include "message.h"
-#include "str.h"
+#include "../common/str.h"
 
 /** Menu item structure */
 typedef struct MenuItem {

@@ -2,6 +2,7 @@
 #define __DATE_H
 
 CPP_START
+
 #include "../core/core.h"
 
 #include <time.h>

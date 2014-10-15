@@ -4,7 +4,7 @@
 CPP_START
 
 #include "../core/core.h"
-#include "../Array.h"
+#include "./Array.h"
 
 typedef struct Hash {
 	size_t length;
@@ -53,12 +53,14 @@ pointer Hash_get(Hash * hash, const char * key);
  */
 void Hash_iterate(Hash * hash, void (* callback)(char *, pointer));
 
+
 /**
  * Deallocate hash
  *
- * @param Hash * hash
+ * @param Hash * self
+ * @param boolean with_data
  */
-void Hash_destroy(Hash * hash);
+void Hash_destroy(Hash * self, boolean with_data);
 
 /**
  * Merge two hashes

@@ -51,12 +51,13 @@ char * message_get_style(char *dest, const char *style, const char *colorcode, c
 	strcat(ret, backgroundcode);
 	strcat(ret, "m");
 	strcpy(dest, ret);
+	return dest;
 }
 
 void message_custom(const char *msg, const char *style, const char *color, const char *background) {
 	char default_style[12];// Max length is \e[00;00;00m + \0=> 12
 	char custom_style[12];
-	
+
 	message_get_style(default_style, TEXT_STYLE_DEFAULT, TEXT_COLOR_DEFAULT, TEXT_BACKGROUND_DEFAULT);
 	message_get_style(custom_style, style, color, background);
 

@@ -23,7 +23,7 @@ CPP_START
 #define __ARRAY_READ(arr, len, fs) \
 	size_t i = 0; \
 	for(; i < len; i++) { \
-		printf("[%d]: ", i); \
+		printf("[%zu]: ", i); \
 		if( 1 !=  scanf(fs, arr + i)) { \
 			utils_ib_clean(); \
 			i--; \

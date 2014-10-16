@@ -315,11 +315,11 @@ char * str_trimcharleft(char * str, const char c) {
 		positions = 0,
 		i = 0;
 
-	while( str[i++] == c && i < length ) {
+	while ( str[i++] == c && i < length ) {
 		positions++;
 	}
 
-	if( positions ) {
+	if ( positions ) {
 		memmove(str, str + positions, length - positions + 1);
 	}
 	return str;

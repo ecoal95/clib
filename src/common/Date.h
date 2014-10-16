@@ -6,6 +6,7 @@ CPP_START
 #include "../core/core.h"
 
 #include <time.h>
+// struct tm *getdatem(const char *string);
 
 #define DATE_FORMAT_ISO "%F"
 #define TIME_FORMAT_ISO "%T"
@@ -30,10 +31,11 @@ Date * newDate();
  * Get a date from a string
  *
  * @param const char * str
+ * @param const char * format
  *
  * @return Date *
  */
-Date * Date__parse(const char * str);
+Date * Date__parse(const char * str, const char * format);
 
 /**
  * Get a date's time
@@ -53,6 +55,13 @@ time_t Date_getTime(Date * self);
  * @return Date *
  */
 Date * Date_setTime(Date * self, time_t time);
+
+/**
+ * Destroy a date
+ *
+ * @param Date * self
+ */
+void Date_destroy(Date * self);
 
 /** Interval types */
 typedef enum DateIntervalType {

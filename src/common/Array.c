@@ -52,6 +52,8 @@ ArrayItem * newArrayItem(const pointer data) {
 
 	return_null_if(ret == NULL);
 
+	ret->next = NULL;
+
 	ret->data = data;
 
 	return ret;
@@ -92,6 +94,8 @@ ArrayItem * Array_nth(Array * arr, int index) {
 	return_null_if(arr == NULL);
 
 	length = Array_length(arr);
+
+
 	items = arr->items;
 
 	// if in empty array

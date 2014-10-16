@@ -22,7 +22,7 @@ Map * newMap() {
  *
  * @return MapKeyPair *
  */
-MapKeyPair * newKeyPair( void * key, pointer data ) {
+MapKeyPair * newKeyPair( const void * key, pointer data ) {
 	MapKeyPair * ret = (MapKeyPair *) malloc(sizeof(MapKeyPair));
 
 	return_null_if(ret == NULL);
@@ -42,9 +42,8 @@ MapKeyPair * newKeyPair( void * key, pointer data ) {
  *
  * @return self
  */
-Map * Map_set(Map * self, void * key, pointer data) {
+Map * Map_set(Map * self, const void * key, pointer data) {
 	MapKeyPair * keyPair;
-	size_t i = 0;
 
 	return_null_if(key == NULL);
 
@@ -68,11 +67,27 @@ Map * Map_set(Map * self, void * key, pointer data) {
  *
  * @return pointer
  */
-pointer Map_get(Map * self, void * key) {
-	size_t i;
+pointer Map_get(Map * self, const void * key) {
 	MapKeyPair * keyPair;
 	ARRAY_EACH(self->keyPairs, keyPair,
 		if ( keyPair->key == key ) {
+			return keyPair->value;
+		}
+	);
+
+	return NULL;
+}
+
+/**
+ * Get data from a hash assuming keys are strings
+ *
+ * @param Map * self
+ * @param const char * key
+ */
+pointer Map_getString(Map * self, const char * key) {
+	MapKeyPair * keyPair;
+	ARRAY_EACH(self->keyPairs, keyPair,
+		if ( strcmp((char *) keyPair->key, key) == 0 ) {
 			return keyPair->value;
 		}
 	);
@@ -86,7 +101,7 @@ pointer Map_get(Map * self, void * key) {
  * @param Map * self
  * @param void (callback *)(char *, pointer)
  */
-void Map_iterate(Map * self, void (* callback)(void *, pointer)) {
+void Map_iterate(Map * self, void (* callback)(const void *, pointer)) {
 	MapKeyPair * keyPair;
 	ARRAY_EACH(self->keyPairs, keyPair,
 		callback(keyPair->key, keyPair->value);
@@ -99,7 +114,8 @@ void Map_iterate(Map * self, void (* callback)(void *, pointer)) {
  * @param Map * self
  */
 void Map_destroy(Map * self) {
-	Array_destroy(self->keyPairs, FALSE);
+	// We free the array and the keypairs
+	Array_destroy(self->keyPairs, TRUE);
 	free(self);
 }
 

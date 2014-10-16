@@ -50,21 +50,23 @@
 #if __LIB_JUST_CORE == 0
 
 #include "common/Array.h"
-#include "common/Hash.h"
+#include "common/Map.h"
 #include "common/Date.h"
 #include "common/array.h"
 #include "common/str.h"
 #include "common/file.h"
+#include "common/I18n.h"
 
 
 #if __LIB_AUTO_INCLUDE == 1
 
 #include "common/Array.c"
-#include "common/Hash.c"
+#include "common/Map.c"
 #include "common/Date.c"
 #include "common/array.c"
 #include "common/str.c"
 #include "common/file.c"
+#include "common/I18n.c"
 // #include "date.c"
 
 

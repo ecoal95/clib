@@ -7,7 +7,7 @@ CPP_START
 #include "./Array.h"
 
 typedef struct MapKeyPair {
-	void * key;
+	const void * key;
 	void * value;
 } MapKeyPair;
 
@@ -37,7 +37,7 @@ Map * newMap();
  *
  * @return MapKeyPair *
  */
-MapKeyPair * newKeyPair(void * key, pointer data );
+MapKeyPair * newKeyPair(const void * key, pointer data );
 
 /**
  * Get map length, for consistency
@@ -47,31 +47,39 @@ MapKeyPair * newKeyPair(void * key, pointer data );
 /**
  * Set a map key
  *
- * @param Map * hash
+ * @param Map * self
  * @param void * key
  * @param pointer data
  *
  * @return hash
  */
-Map * Map_set(Map * hash, void * key, pointer data);
+Map * Map_set(Map * self, const void * key, pointer data);
 
 /**
  * Get data from hash
  *
- * @param Map * hash
+ * @param Map * self
  * @param void * key
  *
  * @return pointer
  */
-pointer Map_get(Map * hash, void * key);
+pointer Map_get(Map * self, const void * key);
+
+/**
+ * Get data from a hash assuming keys are strings
+ *
+ * @param Map * self
+ * @param const char * key
+ */
+pointer Map_getString(Map * self, const char * key);
 
 /**
  * Iterate through keys and values
  *
- * @param Map * hash
+ * @param Map * self
  * @param void (callback *)(void *, pointer)
  */
-void Map_iterate(Map * hash, void (* callback)(void *, pointer));
+void Map_iterate(Map * self, void (* callback)(const void *, pointer));
 
 
 /**
@@ -84,8 +92,8 @@ void Map_destroy(Map * self);
 /**
  * Merge two hashes
  *
- * @param Map * hash_1
- * @param Map * hash_2
+ * @param Map * self_1
+ * @param Map * self_2
  *
  * @return Map *
  */

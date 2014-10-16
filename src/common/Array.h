@@ -26,28 +26,28 @@ typedef struct Array {
 /**
  * Optimized loop through data
  */
-#define ARRAY_EACH(array, data, ...) do { \
-	ArrayItem * item = array->items; \
-	if ( item == NULL ) { \
+#define ARRAY_EACH(array, value, ...) do { \
+	ArrayItem * __item = array->items; \
+	if ( __item == NULL ) { \
 		break; \
 	} \
 	do { \
-		data = item->data; \
+		value = (typeof(value)) __item->data; \
 		__VA_ARGS__ \
-	} while( (item = item->next) ); \
+	} while( (__item = __item->next) ); \
 } while ( 0 )
 
-#define ARRAY_EACH_WITH_INDEX(array, data, index, ...) do { \
-	ArrayItem * item = array->items; \
+#define ARRAY_EACH_WITH_INDEX(array, value, index, ...) do { \
+	ArrayItem * __item = array->items; \
 	index = 0; \
-	if ( item == NULL ) { \
+	if ( __item == NULL ) { \
 		break; \
 	} \
 	do { \
-		data = item->data; \
+		value = (typeof(value)) item->data; \
 		__VA_ARGS__ \
 		index++; \
-	} while ( (item = item->next) ); \
+	} while ( (__item = __item->next) ); \
 } while ( 0 )
 /**
  * Check emptyness of array

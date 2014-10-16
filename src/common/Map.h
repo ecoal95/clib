@@ -16,11 +16,11 @@ typedef struct Map {
 	Array * keyPairs;
 } Map;
 
-#define MAP_ITERATE(self, key, value, ...) do { \
+#define MAP_ITERATE(self, _key, _value, ...) do { \
 	MapKeyPair * __keyPair; \
 	ARRAY_EACH(self->keyPairs, __keyPair, \
-		key = keyPair->key; \
-		value = keyPair->value; \
+		_key = (typeof(_key)) __keyPair->key; \
+		_value = (typeof(_value)) __keyPair->value; \
 		__VA_ARGS__ \
 	); \
 } while ( 0 )
@@ -69,7 +69,7 @@ pointer Map_get(Map * hash, void * key);
  * Iterate through keys and values
  *
  * @param Map * hash
- * @param void (callback *)(char *, pointer)
+ * @param void (callback *)(void *, pointer)
  */
 void Map_iterate(Map * hash, void (* callback)(void *, pointer));
 

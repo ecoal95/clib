@@ -73,13 +73,9 @@ ArrayItem * newArrayItem(const pointer data) {
  * @return ArrayItem *
  */
 ArrayItem * Array_nth(Array * arr, int index) {
-	size_t length;
 	ArrayItem * items;
 
 	return_null_if(arr == NULL);
-
-	length = Array_length(arr);
-
 
 	items = arr->items;
 
@@ -87,10 +83,10 @@ ArrayItem * Array_nth(Array * arr, int index) {
 	return_null_if(items == NULL);
 
 	if ( index < 0 ) {
-		index += length;
+		index += arr->length;
 	}
 
-	return_null_if(index >= length || index < 0);
+	return_null_if(index >= arr->length || index < 0);
 
 	while ( index-- ) {
 		items = items->next;

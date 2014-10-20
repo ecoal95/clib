@@ -11,6 +11,7 @@ CPP_START
 struct ArrayItem {
 	pointer data;
 	struct ArrayItem * next;
+	struct ArrayItem * prev;
 };
 
 typedef struct ArrayItem ArrayItem;
@@ -20,6 +21,8 @@ typedef struct ArrayItem ArrayItem;
  */
 typedef struct Array {
 	ArrayItem * items;
+	ArrayItem * last;
+	size_t length;
 } Array;
 
 
@@ -44,7 +47,7 @@ typedef struct Array {
 		break; \
 	} \
 	do { \
-		value = (typeof(value)) item->data; \
+		value = (typeof(value)) __item->data; \
 		__VA_ARGS__ \
 		index++; \
 	} while ( (__item = __item->next) ); \
@@ -95,7 +98,7 @@ ArrayItem * newArrayItem(const pointer data);
  *
  * @return size_t
  */
-size_t Array_length(Array * arr);
+#define Array_length(arr) (arr->length)
 
 
 /**
@@ -118,7 +121,7 @@ ArrayItem * Array_nth(Array * arr, int index);
  *
  * @return ArrayItem *
  */
-#define Array_last(arr) Array_nth(arr, -1)
+#define Array_last(arr) (arr->last)
 
 /**
  * Push data into the array

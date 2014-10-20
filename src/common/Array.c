@@ -273,7 +273,8 @@ size_t Array_unshift(Array * arr, const pointer data) {
  * @return void
  */
 pointer Array_delete(Array * arr, int index, boolean with_data) {
-	ArrayItem * element;
+	ArrayItem * element,
+		prev;
 
 	return_null_if(arr == NULL);
 
@@ -282,8 +283,18 @@ pointer Array_delete(Array * arr, int index, boolean with_data) {
 	// TODO: Check for negative index to the first element, which wont work
 	if( index == 0 || index == - ((int) arr->length) ) {
 		arr->items = element->next;
+		// Element was last
+		if ( element->next == NULL ) {
+			arr->last = NULL;
+		}
 	} else {
-		Array_nth(arr, index - 1)->next = element->next;
+		prev = Array_nth(arr, index - 1);
+
+		prev->next = element->next;
+
+		if ( element->next == NULL ) {
+			arr->last = prev;
+		}
 	}
 
 	arr->length--;
@@ -341,8 +352,11 @@ size_t Array_splice(Array * arr, int index, size_t elements, boolean with_data) 
 
 	prev->next = last_removed_element->next;
 	arr->length -= elements;
-	// TODO: infer this
-	arr->last = Array_nth(arr, -1);
+	
+	// If removed the last element
+	if ( prev->next == NULL ) {
+		arr->last = prev;
+	}
 
 	ArrayItem_free(last_removed_element, with_data);
 
@@ -361,6 +375,7 @@ size_t Array_splice(Array * arr, int index, size_t elements, boolean with_data) 
 Array * Array_concat(Array * arr1, Array * arr2) {
 	arr1->last->next = arr2->items;
 	arr1->length += arr2->length;
+	arr->last = arr2->last;
 
 	return arr1;
 }

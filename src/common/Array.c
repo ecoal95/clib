@@ -11,6 +11,8 @@ Array * newArray() {
 	return_null_if(ret == NULL);
 
 	ret->items = NULL;
+	ret->last = NULL;
+	ret->length = 0;
 
 	return ret;
 }
@@ -59,23 +61,6 @@ ArrayItem * newArrayItem(const pointer data) {
 	return ret;
 }
 
-/**
- * Calculate the length of the array
- *
- * @param Array * array
- *
- * @return size_t
- */
-size_t Array_length(Array * arr) {
-	size_t length = 0;
-	ArrayItem * items = arr->items;
-	if ( items ) {
-		do {
-			length++;
-		} while ( (items = items->next) );
-	}
-	return length;
-}
 
 /**
  * Get the nth element from the array, null if doesn't exist
@@ -126,12 +111,15 @@ Array * Array_push(Array * arr, const pointer data) {
 
 	return_null_if(arr == NULL);
 
-	if( arr->items == NULL ) {
-		arr->items = newArrayItem(data);
+	if( arr->last == NULL ) {
+		arr->items = arr->last = newArrayItem(data);
+		arr->length++;
 		return arr;
 	}
 
-	Array_last(arr)->next = newArrayItem(data);
+	arr->last->next = newArrayItem(data);
+	arr->last = arr->last->next;
+	arr->length++;
 
 	return arr;
 }
@@ -147,7 +135,6 @@ Array * Array_push(Array * arr, const pointer data) {
  */
 pointer Array_set(Array * arr, int index, const pointer data) {
 	ArrayItem * item;
-	size_t length;
 
 	return_null_if(arr == NULL);
 
@@ -164,10 +151,8 @@ pointer Array_set(Array * arr, int index, const pointer data) {
 	}
 
 	// If item doesnt exist we create enough empty elements
-	length = Array_length(arr);
-	while(length <= index) {
+	while(arr->length <= index) {
 		Array_push(arr, NULL);
-		length++;
 	}
 
 	Array_push(arr, data);
@@ -204,21 +189,19 @@ pointer Array_get(Array * arr, int index) {
  * @return pointer
  */
 pointer Array_pop(Array * arr) {
-	size_t length;
 	ArrayItem * penultimate;
 	pointer ret;
 
 	return_null_if(arr == NULL);
 
-	length = Array_length(arr);
-
 	// trying to pop from empty array
-	return_null_if(length == 0);
+	return_null_if(arr->length == 0);
 
-	if( length == 1 ) {
+	if ( arr->length == 1 ) {
 		ret = ArrayItem_free(arr->items, FALSE);
 
 		arr->items = NULL;
+		arr->length = 0;
 
 		return ret;
 	}
@@ -228,6 +211,7 @@ pointer Array_pop(Array * arr) {
 	ret = ArrayItem_free(penultimate->next, FALSE);
 
 	penultimate->next = NULL;
+	arr->length--;
 
 	return ret;
 }
@@ -247,6 +231,7 @@ pointer Array_shift(Array * arr) {
 	first = arr->items;
 
 	arr->items = arr->items->next;
+	arr->length--;
 
 	return ArrayItem_free(first, FALSE);
 }
@@ -271,7 +256,9 @@ size_t Array_unshift(Array * arr, const pointer data) {
 
 	arr->items = item;
 
-	return Array_length(arr);
+	arr->length++;
+
+	return arr->length;
 }
 
 /**
@@ -293,11 +280,13 @@ pointer Array_delete(Array * arr, int index, boolean with_data) {
 	element = Array_nth(arr, index);
 
 	// TODO: Check for negative index to the first element, which wont work
-	if( index == 0 ) {
+	if( index == 0 || index == - ((int) arr->length) ) {
 		arr->items = element->next;
 	} else {
 		Array_nth(arr, index - 1)->next = element->next;
 	}
+
+	arr->length--;
 
 	return ArrayItem_free(element, with_data);
 }
@@ -313,47 +302,52 @@ pointer Array_delete(Array * arr, int index, boolean with_data) {
  * @return size_t
  */
 size_t Array_splice(Array * arr, int index, size_t elements, boolean with_data) {
-	size_t length,
-		i;
+	size_t i;
 	ArrayItem * prev;
 	ArrayItem * last_removed_element;
 
 	return_val_if(arr == NULL, 0);
 
-	length = Array_length(arr);
 
 	// this allows negative index
 	if( index < 0 ) {
-		index += length;
+		index += arr->length;
 	}
 
-	return_val_if(index >= length, length);
-	return_val_if(elements + index > length, length);
+	return_val_if(index >= arr->length, arr->length);
+	return_val_if(elements + index > arr->length, arr->length);
 
 	if( index == 0 ) {
 		for(i = 0; i < elements; i++) {
 			Array_delete(arr, 0, with_data);
 		}
-		return length - elements;
+		arr->length -= elements;
+		return arr->length;
 	}
 
 	prev = Array_nth(arr, index - 1);
 
-	return_val_if(prev == NULL, length);
+	return_val_if(prev == NULL, arr->length);
 
 	last_removed_element = Array_nth(arr, index + elements - 1);
 
 
 	i = elements - 1; // want to keep the last one
+
+	// TODO: optimize
 	while(i--) {
 		ArrayItem_free(Array_nth(arr, index + i), with_data);
 	}
 
 	prev->next = last_removed_element->next;
+	arr->length -= elements;
+	// TODO: infer this
+	arr->last = Array_nth(arr, -1);
 
 	ArrayItem_free(last_removed_element, with_data);
 
-	return length - elements;
+
+	return arr->length;
 }
 
 /**
@@ -365,7 +359,8 @@ size_t Array_splice(Array * arr, int index, size_t elements, boolean with_data) 
  * @return Array * arr1
  */
 Array * Array_concat(Array * arr1, Array * arr2) {
-	Array_last(arr1)->next = arr2->items;
+	arr1->last->next = arr2->items;
+	arr1->length += arr2->length;
 
 	return arr1;
 }
@@ -380,17 +375,17 @@ Array * Array_concat(Array * arr1, Array * arr2) {
  * NOTE: This performs strict pointer comparison
  */
 int Array_contains(Array * arr, const pointer data) {
-	size_t len,
-		i = 0;
+	size_t i = 0;
+	pointer arr_data;
 
 	return_val_if(arr == NULL, -1);
 
-	len = Array_length(arr);
-	for ( ; i < len; i++ ) {
-		if ( Array_get(arr, i) == data ) {
+	ARRAY_EACH_WITH_INDEX(arr, arr_data, i,
+		if ( arr_data == data ) {
 			return i;
 		}
-	}
+	);
+
 	return -1;
 }
 
@@ -402,18 +397,14 @@ int Array_contains(Array * arr, const pointer data) {
  * @param pointer data
  */
 void Array_forEach(Array * arr, void (* callback)(pointer, size_t, pointer), pointer data) {
-	ArrayItem * items;
+	pointer arr_data;
 	size_t i = 0;
 
 	return_if(arr == NULL);
 
-	items = arr->items;
-
-	if( items ) {
-		do {
-			callback(items->data, i++, data);
-		} while((items = items->next));
-	}
+	ARRAY_EACH_WITH_INDEX(arr, arr_data, i,
+		callback(arr_data, i, data);
+	);
 }
 
 /**
@@ -474,8 +465,9 @@ void Array_destroy(Array * arr, boolean with_data) {
 
 	return_if(arr == NULL);
 
-	length = Array_length(arr);
+	length = arr->length;
 
+	// TODO: optimize, we must free reversing the order...
 	while(length--) {
 		ArrayItem_free(Array_nth(arr, length), with_data);
 	}
@@ -505,7 +497,7 @@ void Array_bsort(Array * arr, int (* compfunc)(pointer, pointer)) {
 	return_if(arr == NULL);
 	return_if(compfunc == NULL);
 
-	length = Array_length(arr);
+	length = arr->length;
 
 	for(i = 0; i < length; i++) {
 		for(j = 0; j < length - i - 1; j++) {

@@ -117,6 +117,9 @@ Array * Array_push(Array * arr, const pointer data) {
 		return arr;
 	}
 
+	// debugging purposes
+	return_null_if(arr->last->next != NULL);
+
 	arr->last->next = newArrayItem(data);
 	arr->last = arr->last->next;
 	arr->length++;
@@ -520,6 +523,7 @@ void Array_bsort(Array * arr, int (* compfunc)(pointer, pointer)) {
 			compared_item = current_item->next;
 			if( compfunc(current_item->data, compared_item->data) <= 0 ) {
 				// Instead of swapping the whole element we just swap the data
+				// This doesn't break arr->last, so even better
 				temp_data = current_item->data;
 				current_item->data = compared_item->data;
 				compared_item->data = temp_data;

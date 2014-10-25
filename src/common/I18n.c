@@ -1,3 +1,10 @@
+#include "I18n.h"
+#include <locale.h>
+#include "Array.h"
+#include "Map.h"
+#include "str.h"
+#include "file.h"
+
 /** Current locale */
 static char * locale = NULL;
 

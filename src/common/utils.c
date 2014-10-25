@@ -1,3 +1,4 @@
+#include "utils.h"
 /**
  * Clean the input buffer
  * We can fflush(stdin) on windows, but it apparently doesn't work on ubuntu

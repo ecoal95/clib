@@ -1,4 +1,7 @@
 #include "array.h"
+#include "str.h"
+#include "utils.h"
+
 /**
  * Creates an array using dynamic memory allocation
  *

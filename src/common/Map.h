@@ -1,10 +1,11 @@
 #ifndef __MAP_H
 #define __MAP_H
 
+#include "../core/core.h"
+
 CPP_START
 
-#include "../core/core.h"
-#include "./Array.h"
+#include "Array.h"
 
 typedef struct MapKeyPair {
 	const void * key;

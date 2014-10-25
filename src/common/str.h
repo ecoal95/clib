@@ -1,10 +1,8 @@
 #ifndef __STR_H
 #define __STR_H
 
-CPP_START
-
 #include "../core/core.h"
-#include "array.h"
+CPP_START
 
 #define STR_ALPHA_UPPER_MIN 65
 #define STR_ALPHA_UPPER_MAX 90

@@ -1,4 +1,5 @@
 #include "file.h"
+#include "str.h"
 /**
  * Returns file size in bytes
  *

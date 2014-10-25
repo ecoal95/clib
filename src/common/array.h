@@ -1,10 +1,9 @@
 #ifndef __ARRAY_H
 #define __ARRAY_H
 
-CPP_START
-
 #include "../core/core.h"
-#include "str.h"
+
+CPP_START
 
 #ifndef ARRAY_STRING_LENGTH
 #define ARRAY_STRING_LENGTH 100

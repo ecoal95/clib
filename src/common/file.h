@@ -1,9 +1,9 @@
 #ifndef __FILE_H
 #define __FILE_H
 
-CPP_START
-
 #include "../core/core.h"
+
+CPP_START
 
 #define DIRECTORY_SEPARATOR '/'
 #define EOL '\n'

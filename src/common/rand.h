@@ -6,6 +6,8 @@
 #ifndef __RAND_H
 #define __RAND_H
 
+#include "../core/core.h"
+
 CPP_START
 
 /**

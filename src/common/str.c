@@ -1,4 +1,6 @@
 #include "str.h"
+#include "array.h"
+#include "rand.h"
 
 /**
  * Clone a string

@@ -1,9 +1,10 @@
 #ifndef __ARRAY_STRUCT_H
 #define __ARRAY_STRUCT_H
 
+#include "../core/core.h"
+
 CPP_START
 
-#include "../core/core.h"
 
 /**
  * Simple linked list
@@ -11,7 +12,6 @@ CPP_START
 struct ArrayItem {
 	pointer data;
 	struct ArrayItem * next;
-	struct ArrayItem * prev;
 };
 
 typedef struct ArrayItem ArrayItem;

@@ -272,8 +272,8 @@ size_t Array_unshift(Array * arr, const pointer data) {
  * @return void
  */
 pointer Array_delete(Array * arr, int index, boolean with_data) {
-	ArrayItem * element,
-		prev;
+	ArrayItem * element;
+	ArrayItem * prev;
 
 	return_null_if(arr == NULL);
 
@@ -351,7 +351,7 @@ size_t Array_splice(Array * arr, int index, size_t elements, boolean with_data) 
 
 	prev->next = last_removed_element->next;
 	arr->length -= elements;
-	
+
 	// If removed the last element
 	if ( prev->next == NULL ) {
 		arr->last = prev;
@@ -374,7 +374,7 @@ size_t Array_splice(Array * arr, int index, size_t elements, boolean with_data) 
 Array * Array_concat(Array * arr1, Array * arr2) {
 	arr1->last->next = arr2->items;
 	arr1->length += arr2->length;
-	arr->last = arr2->last;
+	arr1->last = arr2->last;
 
 	return arr1;
 }

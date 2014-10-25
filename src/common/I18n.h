@@ -1,12 +1,9 @@
 #ifndef __I18N_H
 #define __I18N_H
 
-CPP_START
+#include "../core/core.h"
 
-#include <locale.h>
-#include "../common/Array.h"
-#include "../common/Map.h"
-#include "../common/str.h"
+CPP_START
 
 /** Consider moving to enum? */
 typedef const char * I18nKey;

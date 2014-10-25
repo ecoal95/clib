@@ -33,7 +33,11 @@ Date * Date__parse(const char * str, const char * format) {
 
 	return_null_if(ret == NULL);
 
-	strptime(str, format, ret);
+	if ( format == NULL ) {
+		*ret = *getdate(str);
+	} else {
+		strptime(str, format, ret);
+	}
 
 	mktime(ret);
 

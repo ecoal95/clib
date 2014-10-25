@@ -1,12 +1,10 @@
 #ifndef __DATE_H
 #define __DATE_H
 
-CPP_START
-
 #include "../core/core.h"
 
-#include <time.h>
-// struct tm *getdatem(const char *string);
+CPP_START
+
 
 #define DATE_FORMAT_ISO "%F"
 #define TIME_FORMAT_ISO "%T"

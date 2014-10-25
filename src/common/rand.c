@@ -1,3 +1,4 @@
+#include "rand.h"
 /**
  * Get a random number in some range
  *

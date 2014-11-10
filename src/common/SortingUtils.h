@@ -19,6 +19,42 @@ typedef void ** (*SortingFunction)(void **, size_t, SortingComparison, void *);
 void ** SortingUtils__bubbleSort(void **vector, size_t length, SortingComparison cmp, void *data);
 
 /**
+ * Sorting a vector of pointers using select sort algorithm
+ *
+ * @param void **vector
+ * @param size_t length
+ * @param SortingComparison cmp
+ * @param void *data
+ *
+ * @return void ** the same vector
+ */
+void ** SortingUtils__selectSort(void **vector, size_t length, SortingComparison cmp, void *data);
+
+/**
+ * Sorting a vector of pointers using insert sort algorithm
+ *
+ * @param void **vector
+ * @param size_t length
+ * @param SortingComparison cmp
+ * @param void *data
+ *
+ * @return void ** the same vector
+ */
+void ** SortingUtils__insertSort(void **vector, size_t length, SortingComparison cmp, void *data);
+
+/**
+ * Sorting a vector of pointers using quick sort algorithm
+ *
+ * @param void **vector
+ * @param size_t length
+ * @param SortingComparison cmp
+ * @param void *data
+ *
+ * @return void ** the same vector
+ */
+void ** SortingUtils__quickSort(void **vector, size_t length, SortingComparison cmp, void *data);
+
+/**
  * Sorting comparisong for descending order of ints
  *
  * @param void *v1

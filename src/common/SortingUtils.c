@@ -23,7 +23,7 @@ void ** SortingUtils__bubbleSort(void **vector, size_t length, SortingComparison
 	length--;
 
 	for ( ; i < length; i++ ) {
-		for ( j = 0; j < length - i; i++ ) {
+		for ( j = 0; j < length - i; j++ ) {
 			if ( cmp(vector[j], vector[j + 1], data) > 0 ) {
 				SU_SWAP(vector[j], vector[j + 1]);
 			}
@@ -51,7 +51,7 @@ void ** SortingUtils__selectSort(void **vector, size_t length, SortingComparison
 	for ( i = 1; i < length; i++) {
 		lower_index = i - 1;
 		for ( j = i; j < length; j++) {
-			if ( cmp(vector[lower_index], vector[j], data) > 0 ) {
+			if ( cmp(vector[j], vector[lower_index], data) < 0 ) {
 				lower_index = j;
 			}
 		}
@@ -85,7 +85,7 @@ void ** SortingUtils__insertSort(void **vector, size_t length, SortingComparison
 		while ( j-- ) {
 			// If the current element is smaller than the left one
 			// Move left element one position to the rigth
-			if ( cmp(unsorted, vector[j], data) > 0 ) {
+			if ( cmp(unsorted, vector[j], data) < 0 ) {
 				SU_SWAP(vector[j], vector[j + 1]);
 			} else {
 				// Else we stop, we have to insert element on j + 1
@@ -121,7 +121,7 @@ void ** SortingUtils__quickSort(void **vector, size_t length, SortingComparison 
 	}
 
 	for ( i = 1; i < length; i++) {
-		if ( cmp(vector[i], vector[pivot_index], data) > 0 ) {
+		if ( cmp(vector[i], vector[pivot_index], data) < 0 ) {
 			// if element is smaller than the pivot
 			// swap it with the first element greater than it
 			// So the first element greater than it is potencially the next one
@@ -158,7 +158,7 @@ int SortingUtils__INT_DESCENDING(const void *v1, const void *v2, void *data) {
 	int *i1 = (int *) v1;
 	int *i2 = (int *) v2;
 
-	return *i1 - *i2;
+	return *i2 - *i1;
 }
 
 /**

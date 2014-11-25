@@ -1,4 +1,7 @@
 // Needed for some funcs, mainly in Date library
+#ifndef __CLIB_CORE_H
+#define __CLIB_CORE_H
+
 #ifndef __USE_XOPEN
 #define __USE_XOPEN
 #endif
@@ -14,3 +17,4 @@
 #include <time.h>
 
 #include "defs.h"
+#endif

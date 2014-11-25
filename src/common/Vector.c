@@ -1,3 +1,5 @@
+#include "Vector.h"
+
 /**
  * Allocate a Vector of size VECTOR_DEFAULT_SIZE
  *
